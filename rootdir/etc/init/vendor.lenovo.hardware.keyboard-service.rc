@@ -1,0 +1,4 @@
+service keyboard_aidl_service /vendor/bin/hw/vendor.lenovo.hardware.keyboard-service
+    class hal
+    user system
+    group system

@@ -1,0 +1,4 @@
+service ifaa-beanpod /vendor/bin/hw/vendor.microtrust.hardware.ifaa-service
+    class hal
+    user system
+    group system

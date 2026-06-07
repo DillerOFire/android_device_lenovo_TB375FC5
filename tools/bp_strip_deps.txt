@@ -1,0 +1,32 @@
+#
+# by the tree, and absent from the stock firmware itself. extract-utils derives
+# dependent stays shipped (matching the prior PRODUCT_COPY behaviour); only the
+# libclang_rt.* (compiler sanitizer runtimes) are always stripped in code.
+# named module has no provider anywhere - not shipped in proprietary/, not built
+# shared_libs entries to strip from the generated vendor Android.bp because the
+# these from a prebuilt .so's DT_NEEDED, but the dependency is genuinely dead, so
+# tracking it as a Soong dep only yields "depends on undefined module". The
+# unsatisfiable build-time edge is dropped. One Soong module name per line.
+android.hardware.bluetooth.audio-impl-mediatek
+android.hardware.soundtrigger3-impl
+libGLES_mali
+libbluetooth_audio_session_aidl_mtk
+libcodec2_mtk_vdec
+libcodec2_mtk_venc
+libmediametrics
+libmtkcam_grallocutils
+libmtkcam_hal_aidl_common
+libmtkcam_hal_aidl_provider
+libmtkcam_hal_hidl_provider
+libpqconfig
+libsink
+libtouch_ll_imp
+libvibratorutils
+vendor.mediatek.hardware.audio-V1-ndk
+vendor.mediatek.hardware.mtkpower@1.0
+vendor.mediatek.hardware.mtkpower@1.1
+vendor.mediatek.hardware.mtkpower@1.2
+vendor.mediatek.hardware.pq_aidl-impl
+libcodec2_hidl@1.0
+libcodec2_hidl@1.1
+libcodec2_hidl@1.2

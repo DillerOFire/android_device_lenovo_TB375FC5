@@ -1,0 +1,36 @@
+# SELinux allow rules for denials observed during ~30 min normal-usage
+# burn-in in permissive mode. 723 denials in 7 patterns. This file handles
+# what can be safely allowed; the rest are AOSP-neverallow-protected and
+# need different fixes (file relabel, service disable).
+#
+#   #  count  scontext             tcontext              tclass  fix
+#   1    425  flags_health_check   6 specific *_prop     file    allow
+#   2    275  init                 vendor_file (exec)    file    skip - AOSP neverallow
+#                                                                forbids init:execute_no_trans
+#                                                                on any file_type. Real fix:
+#                                                                relabel /vendor/bin/thermal_core
+#                                                                to thermal_core_exec at mkfs.
+#   3      9  init                 proc_gpu_memory       file    allow (vendor-side)
+#   4      4  init                 proc_dmaheap          file    allow (vendor-side)
+#   5      3  init                 system_server (call)  binder  allow
+#   6      3  system_server        init (call)           binder  skip - AOSP neverallow
+#                                                                forbids any domain calling
+#                                                                init via binder.
+#   7      2  init                 bluetooth (call)      binder  allow
+#   8      2  bluetooth            init (call)           binder  skip - same as #6
+
+# (1) flags_health_check oneshot service validates property contexts at
+#     boot. Trimmed to the 6 specific types observed; ioctl/lock removed
+#     because the umbrella neverallow forbids those for property_type.
+allow flags_health_check aac_drc_prop:file { open read getattr map };
+allow flags_health_check ab_update_gki_prop:file { open read getattr map };
+allow flags_health_check adaptive_haptics_prop:file { open read getattr map };
+allow flags_health_check adbd_prop:file { open read getattr map };
+allow flags_health_check apexd_config_prop:file { open read getattr map };
+allow flags_health_check apexd_payload_metadata_prop:file { open read getattr map };
+
+# (5) init -> system_server binder calls (one direction).
+allow init system_server:binder call;
+
+# (7) init -> bluetooth binder calls (one direction).
+allow init bluetooth:binder call;

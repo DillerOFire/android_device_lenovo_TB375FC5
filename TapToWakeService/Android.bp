@@ -1,0 +1,32 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+// Tap-to-wake bridge for TB375FC.
+//
+// AOSP Settings -> Display -> Tap to wake writes Settings.Secure.DOUBLE_TAP_TO_WAKE.
+// PowerManagerService calls into the Power HAL with Mode.DOUBLE_TAP_TO_WAKE,
+// but mtkpower ignores that mode (no string match for "gesture_control" or
+// "tap_to_wake" in the binary), so the toggle is end-to-end broken without
+// a bridge.
+//
+// This small system_ext app observes Settings.Secure.DOUBLE_TAP_TO_WAKE and
+// writes "enable"/"disable" to /proc/gesture_control. Runs as
+// android.uid.system (1000) for proc_tp access.
+
+android_app {
+    name: "TapToWakeService",
+    owner: "lineage",
+
+    srcs: ["src/**/*.java"],
+    manifest: "AndroidManifest.xml",
+
+    platform_apis: true,
+    privileged: true,
+    certificate: "platform",
+    system_ext_specific: true,
+
+    optimize: {
+        proguard_flags_files: ["proguard.flags"],
+    },
+}

@@ -1,0 +1,5 @@
+# The PS5170 charger's wakeup node is labeled generic sysfs (the de-hacked
+# vendor_mtk_prebuilt/genfs_contexts covers many charger/gauge wakeup paths but not this
+# one), so system_suspend cannot read its wakeup stats under enforcing. Label it sysfs_wakeup
+# like the rest; AOSP system_suspend already holds r_dir_file(system_suspend, sysfs_wakeup).
+genfscon sysfs /devices/platform/11b70000.i2c/i2c-2/2-0028/power_supply/PS5170/wakeup u:object_r:sysfs_wakeup:s0

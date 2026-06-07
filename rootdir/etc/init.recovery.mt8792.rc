@@ -1,0 +1,42 @@
+# tb375fc recovery USB configfs setup.
+#
+# Default LOS recovery init.rc (bootable/recovery/etc/init.rc) sets
+# sys.usb.configfs=0 in on early-init, routing USB gadget setup down the
+# legacy /sys/class/android_usb API. A14+ MTK kernels (GKI 6.1) only expose
+# USB gadget via configfs - the legacy sysfs path doesn't exist. Result:
+# gadget never registers, no ADB enumeration in recovery.
+#
+# Setting sys.usb.configfs=1 in on init (which runs after on early-init)
+# overrides the default and routes through the configfs gadget path defined
+# in the same init.rc at lines 135-148 / 195-222.
+#
+# sys.usb.controller is the UDC kernel object name written to
+# /config/usb_gadget/g1/UDC. Verified from stock A16 ROW's
+# init.recovery.mt8792.rc: "11201000.usb0" (the platform device binding name),
+# matching the UDC entry in /sys/class/udc/ on this kernel.
+on init
+    setprop sys.usb.configfs 1
+    setprop sys.usb.controller "11201000.usb0"
+
+# Touch coordinate rotation for LOS Recovery. Display is native landscape
+# (2944x1840). Touch IC nt36532 reports raw coordinates as if the panel is
+# portrait (X max 18400 along the short edge, Y max 29440 along the long edge),
+# so a finger tap on "Advanced" maps to "Format" two rows down. libminui's
+# gr_rotate_touch() reads this property to rotate input axes independently
+# of display rotation. ROTATION_RIGHT swaps X<->Y and inverts X (90 deg
+# clockwise). If touch ends up mirrored, flip to ROTATION_LEFT instead.
+on init
+    setprop ro.minui.default_touch_rotation ROTATION_RIGHT
+
+# Microsoft OS Descriptors. Windows USB host enumerates configfs gadgets
+# faster when the device advertises Microsoft OS Descriptors (qw_sign =
+# "MSFT100"). Without these, each adb<->fastboot mode switch incurs ~3-5s
+# extra on the Windows side. The kernel UDC unbind/rebind cycle on MT6897
+# (~7-10s) is inherent to the controller; this trims the host-side portion.
+# Runs on `on boot` so it fires AFTER the standard LOS recovery init.rc
+# mkdir's /config/usb_gadget/g1/ (gated on `on fs && configfs=1` in
+# bootable/recovery/etc/init.rc lines 135-148).
+on boot && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/os_desc/use 1
+    write /config/usb_gadget/g1/os_desc/b_vendor_code 0x1
+    write /config/usb_gadget/g1/os_desc/qw_sign "MSFT100"

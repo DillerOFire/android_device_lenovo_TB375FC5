@@ -1,0 +1,14 @@
+# libfs_mgr probes /sys/fs/f2fs/features/* during a data wipe to detect kernel
+# f2fs capabilities. AOSP recovery.te reads the ext4 feature sysfs but ships no
+# f2fs equivalent, so on this f2fs userdata device the probe is denied. The wipe
+# still completes (recovery has dev_type:blk_file for the format itself), so this
+# is non-fatal, but it is a real enforcing denial. Mirrors the existing AOSP
+# r_dir_file(recovery, sysfs_fs_ext4_features).
+recovery_only(`
+    r_dir_file(recovery, sysfs_fs_f2fs)
+
+    # mkfs.f2fs reads /proc/version for the kernel version string while
+    # formatting userdata/metadata during a wipe. Without it the tool logs
+    # "not exist /proc/version" and falls back to a default. Non-fatal.
+    allow recovery proc_version:file r_file_perms;
+')

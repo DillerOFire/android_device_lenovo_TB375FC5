@@ -1,0 +1,13 @@
+# Coredomain daemon modeled on MTK's thermald (base/public + base/private).
+# The exec type carries system_file_type so init can entrypoint it.
+type omservice_exec, system_file_type, exec_type, file_type;
+typeattribute omservice coredomain;
+
+init_daemon_domain(omservice)
+
+# omservice registers the "omsvc" binder service (labeled omsvc_service in
+# public.te, mapped in private/service_contexts). binder_use grants the
+# servicemanager binder calls; add_service grants registering omsvc. This
+# mirrors stock TB375FC's omservice allow set.
+binder_use(omservice)
+add_service(omservice, omsvc_service)

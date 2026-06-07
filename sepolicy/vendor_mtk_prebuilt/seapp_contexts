@@ -1,0 +1,2 @@
+user=_app seinfo=platform name=com.zui.deviceidservice domain=deviceid_app type=app_data_file
+user=_app seinfo=platform name=com.trustonic.tuiservice domain=mobicore_app type=app_data_file levelFrom=user

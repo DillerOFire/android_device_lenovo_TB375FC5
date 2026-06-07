@@ -1,0 +1,19 @@
+<manifest version="1.0" type="device">
+    <!--
+        Standard GNSS HAL declaration. gnss-service.mediatek serves android.hardware.gnss/IGnss
+        (via android.hardware.gnss-impl-mediatek.so) in addition to the IMtkGnss extension declared
+        in the gnss-mtk.xml fragment. The stock vendor shipped this as the gnss-default.xml fragment,
+        which extract-utils does not carry (it hit a curation packaging-conflict). The main vendor
+        manifest.xml is a PRODUCT_COPY of the stock blob and does not declare standard GNSS, so this
+        device fragment supplies it. Without it the framework LocationManager cannot bind GNSS.
+        Unique filename avoids any collision with an AOSP gnss-default.xml fragment.
+    -->
+    <hal format="aidl">
+        <name>android.hardware.gnss</name>
+        <version>3</version>
+        <interface>
+            <name>IGnss</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+</manifest>

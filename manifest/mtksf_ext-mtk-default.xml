@@ -1,0 +1,24 @@
+<!--
+    Framework manifest fragment declaring the MTK SurfaceFlinger extension HAL.
+
+    Source: extracted from stock TB375FC ZUI A16
+    (/system/etc/vintf/manifest/mtksf_ext-mtk-default.xml).
+
+    Required because vendor's libpowerhal NEEDS
+    vendor.mediatek.framework.mtksf_ext-V2-ndk.so and at init calls
+    AServiceManager_getService("...IMtkSF_ext/default"). Without this
+    declaration in the framework manifest, the service lookup returns
+    NULL and libpowerhal::init() crashes at +1048 with SIGSEGV writing
+    to a NULL pointer.
+
+    The actual service is registered at runtime by /system_ext/bin/magt
+    (gated on ro.vendor.magt.mtk_magt_support=1, which we set in
+    tb375fc-stock-vendor-props.mk).
+-->
+<manifest version="9.0" type="framework">
+    <hal format="aidl">
+        <name>vendor.mediatek.framework.mtksf_ext</name>
+        <version>9</version>
+        <fqname>IMtkSF_ext/default</fqname>
+    </hal>
+</manifest>

@@ -1,0 +1,4 @@
+service soter-beanpod /vendor/bin/hw/vendor.microtrust.hardware.soter-service
+    class hal
+    user system
+    group system

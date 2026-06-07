@@ -1,0 +1,4 @@
+service touchscreen_hal_service /vendor/bin/hw/vendor.lenovo.hardware.touchscreen-service
+    class hal
+    user system
+    group system

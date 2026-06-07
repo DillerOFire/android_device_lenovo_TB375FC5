@@ -1,0 +1,6 @@
+{
+  "requireLibs": [
+    "libapexsupport.so",
+    "libvendorsupport.so"
+  ]
+}

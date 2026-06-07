@@ -1,0 +1,4 @@
+service misc_aidl_service /vendor/bin/hw/vendor.lenovo.hardware.misc-service
+    class hal
+    user system
+    group system

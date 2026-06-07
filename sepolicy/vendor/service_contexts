@@ -1,0 +1,6 @@
+# MTK gralloc IMapper (stable-C AIMapper) registers itself as a service_manager service
+# ("mapper/<instance>") but the de-hack left it unlabeled, so every graphics client
+# (surfaceflinger, bootanim, mediaswcodec, hal_graphics_composer...) fell through to
+# default_android_service and was denied find under enforcing. hal_graphics_allocator_client
+# already holds find on hal_graphics_mapper_service, so labeling it is the whole fix.
+mapper/mediatek u:object_r:hal_graphics_mapper_service:s0

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!--
+        Refresh-rate pickers are intentionally disabled. The panel exposes a
+        144Hz mode, but the active pen only scans at <=120Hz (the NVT
+        controller cannot fit pen scan in the 144Hz frame), so 144 must not be
+        user selectable or it silently breaks the stylus. Both LineageOS list
+        pickers and the AOSP smooth-display switch resolve the panel's max
+        (144) directly from the hardware mode list and cannot be capped by an
+        overlay, so all three are turned off here. The panel runs dynamic up to
+        config_defaultPeakRefreshRate (120, set in the framework overlay) and
+        SurfaceFlinger idles it lower for power. 120 is the highest pen-safe
+        rate and matches what stock actually runs the pen at.
+    -->
+    <bool name="config_show_peak_refresh_rate_switch">false</bool>
+    <bool name="config_show_min_refresh_rate_switch">false</bool>
+    <bool name="config_show_smooth_display">false</bool>
+</resources>

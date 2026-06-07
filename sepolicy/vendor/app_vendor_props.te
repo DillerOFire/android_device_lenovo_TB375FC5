@@ -1,0 +1,9 @@
+# Apps read MTK vendor config props through the graphics and GPU stack: every app's
+# RenderThread reads vendor_mtk_gpu_prop, and the media/display paths read others. The
+# stock policy exposed these to apps through its mtk_core_property_type blanket, which
+# LOS plat does not carry, so the reads now land on the vendor props marked
+# vendor_public_property_type in property.te. Grant non-isolated app domains read on the
+# public set (the "public" in vendor_public_property_type means app-readable). Without
+# this every app's RenderThread is denied vendor_mtk_gpu_prop and the screen blanks under
+# enforcing.
+allow { appdomain -isolated_app -isolated_compute_app } vendor_public_property_type:file { getattr map open read };

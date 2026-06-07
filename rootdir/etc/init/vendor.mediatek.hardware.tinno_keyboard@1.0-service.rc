@@ -1,0 +1,11 @@
+service tinnokeyboard /vendor/bin/hw/vendor.mediatek.hardware.tinno_keyboard@1.0-service
+    # HIDL interface line stripped: host_init_verifier rejects it because we
+    # ship the HIDL .so as a prebuilt with no soong hidl_interface module
+    # declaring it. Runtime still binds via the binary's own register call.
+    class hal
+    user system
+    group system
+    oneshot
+
+on property:sys.boot_completed=1
+    start tinnokeyboard

@@ -1,0 +1,10 @@
+#add node perms for different plat
+on post-fs-data
+    chown system system /proc/mtkfb_debug/dp_modes
+    chown system system /proc/mtkfb_debug/disp_met
+    chmod 0660 /proc/mtkfb_debug/dp_modes
+    chmod 0660 /proc/mtkfb_debug/disp_met
+service display_aidl_service /vendor/bin/hw/vendor.lenovo.hardware.display-service
+    class hal
+    user system
+    group system

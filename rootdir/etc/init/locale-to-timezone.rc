@@ -1,0 +1,213 @@
+# Locale-to-timezone auto-mapping.
+#
+# Setup Wizard sets persist.sys.locale on region pick. AOSP wifi-only-tablet
+# OOBE has no manual timezone picker, and LocationTimeZoneProvider isn't
+# installed (no telephony, no GMS), so without this the device sits at
+# Pacific/Midway forever.
+#
+# Each trigger fires when persist.sys.locale changes to a known value and
+# sets the matching default timezone. AlarmManagerService picks up
+# persist.sys.timezone at next boot; the live property listener applies it
+# immediately for most consumers. User can still override in Settings ->
+# System -> Date & Time -> Time zone.
+#
+# Format: persist.sys.locale uses BCP 47 (hyphen, e.g. en-GB). Bare-language
+# locales (e.g. "en") are not mapped because country is required.
+
+# English-speaking
+on property:persist.sys.locale=en-GB
+    setprop persist.sys.timezone Europe/London
+
+on property:persist.sys.locale=en-IE
+    setprop persist.sys.timezone Europe/Dublin
+
+on property:persist.sys.locale=en-US
+    setprop persist.sys.timezone America/New_York
+
+on property:persist.sys.locale=en-CA
+    setprop persist.sys.timezone America/Toronto
+
+on property:persist.sys.locale=en-AU
+    setprop persist.sys.timezone Australia/Sydney
+
+on property:persist.sys.locale=en-NZ
+    setprop persist.sys.timezone Pacific/Auckland
+
+on property:persist.sys.locale=en-IN
+    setprop persist.sys.timezone Asia/Kolkata
+
+on property:persist.sys.locale=en-ZA
+    setprop persist.sys.timezone Africa/Johannesburg
+
+on property:persist.sys.locale=en-SG
+    setprop persist.sys.timezone Asia/Singapore
+
+on property:persist.sys.locale=en-PH
+    setprop persist.sys.timezone Asia/Manila
+
+# East Asia
+on property:persist.sys.locale=zh-CN
+    setprop persist.sys.timezone Asia/Shanghai
+
+on property:persist.sys.locale=zh-HK
+    setprop persist.sys.timezone Asia/Hong_Kong
+
+on property:persist.sys.locale=zh-TW
+    setprop persist.sys.timezone Asia/Taipei
+
+on property:persist.sys.locale=ja-JP
+    setprop persist.sys.timezone Asia/Tokyo
+
+on property:persist.sys.locale=ko-KR
+    setprop persist.sys.timezone Asia/Seoul
+
+# Southeast Asia
+on property:persist.sys.locale=vi-VN
+    setprop persist.sys.timezone Asia/Ho_Chi_Minh
+
+on property:persist.sys.locale=th-TH
+    setprop persist.sys.timezone Asia/Bangkok
+
+on property:persist.sys.locale=id-ID
+    setprop persist.sys.timezone Asia/Jakarta
+
+on property:persist.sys.locale=ms-MY
+    setprop persist.sys.timezone Asia/Kuala_Lumpur
+
+on property:persist.sys.locale=fil-PH
+    setprop persist.sys.timezone Asia/Manila
+
+# South Asia
+on property:persist.sys.locale=hi-IN
+    setprop persist.sys.timezone Asia/Kolkata
+
+on property:persist.sys.locale=bn-IN
+    setprop persist.sys.timezone Asia/Kolkata
+
+on property:persist.sys.locale=ta-IN
+    setprop persist.sys.timezone Asia/Kolkata
+
+on property:persist.sys.locale=ur-PK
+    setprop persist.sys.timezone Asia/Karachi
+
+# Western Europe
+on property:persist.sys.locale=de-DE
+    setprop persist.sys.timezone Europe/Berlin
+
+on property:persist.sys.locale=de-AT
+    setprop persist.sys.timezone Europe/Vienna
+
+on property:persist.sys.locale=de-CH
+    setprop persist.sys.timezone Europe/Zurich
+
+on property:persist.sys.locale=fr-FR
+    setprop persist.sys.timezone Europe/Paris
+
+on property:persist.sys.locale=fr-BE
+    setprop persist.sys.timezone Europe/Brussels
+
+on property:persist.sys.locale=fr-CH
+    setprop persist.sys.timezone Europe/Zurich
+
+on property:persist.sys.locale=fr-CA
+    setprop persist.sys.timezone America/Toronto
+
+on property:persist.sys.locale=es-ES
+    setprop persist.sys.timezone Europe/Madrid
+
+on property:persist.sys.locale=it-IT
+    setprop persist.sys.timezone Europe/Rome
+
+on property:persist.sys.locale=nl-NL
+    setprop persist.sys.timezone Europe/Amsterdam
+
+on property:persist.sys.locale=nl-BE
+    setprop persist.sys.timezone Europe/Brussels
+
+on property:persist.sys.locale=pt-PT
+    setprop persist.sys.timezone Europe/Lisbon
+
+# Northern Europe
+on property:persist.sys.locale=sv-SE
+    setprop persist.sys.timezone Europe/Stockholm
+
+on property:persist.sys.locale=no-NO
+    setprop persist.sys.timezone Europe/Oslo
+
+on property:persist.sys.locale=nb-NO
+    setprop persist.sys.timezone Europe/Oslo
+
+on property:persist.sys.locale=da-DK
+    setprop persist.sys.timezone Europe/Copenhagen
+
+on property:persist.sys.locale=fi-FI
+    setprop persist.sys.timezone Europe/Helsinki
+
+on property:persist.sys.locale=is-IS
+    setprop persist.sys.timezone Atlantic/Reykjavik
+
+# Central / Eastern Europe
+on property:persist.sys.locale=pl-PL
+    setprop persist.sys.timezone Europe/Warsaw
+
+on property:persist.sys.locale=cs-CZ
+    setprop persist.sys.timezone Europe/Prague
+
+on property:persist.sys.locale=sk-SK
+    setprop persist.sys.timezone Europe/Bratislava
+
+on property:persist.sys.locale=hu-HU
+    setprop persist.sys.timezone Europe/Budapest
+
+on property:persist.sys.locale=ro-RO
+    setprop persist.sys.timezone Europe/Bucharest
+
+on property:persist.sys.locale=bg-BG
+    setprop persist.sys.timezone Europe/Sofia
+
+on property:persist.sys.locale=el-GR
+    setprop persist.sys.timezone Europe/Athens
+
+on property:persist.sys.locale=tr-TR
+    setprop persist.sys.timezone Europe/Istanbul
+
+on property:persist.sys.locale=ru-RU
+    setprop persist.sys.timezone Europe/Moscow
+
+on property:persist.sys.locale=uk-UA
+    setprop persist.sys.timezone Europe/Kyiv
+
+# Middle East / Africa
+on property:persist.sys.locale=ar-SA
+    setprop persist.sys.timezone Asia/Riyadh
+
+on property:persist.sys.locale=ar-AE
+    setprop persist.sys.timezone Asia/Dubai
+
+on property:persist.sys.locale=ar-EG
+    setprop persist.sys.timezone Africa/Cairo
+
+on property:persist.sys.locale=he-IL
+    setprop persist.sys.timezone Asia/Jerusalem
+
+on property:persist.sys.locale=fa-IR
+    setprop persist.sys.timezone Asia/Tehran
+
+# Latin America
+on property:persist.sys.locale=es-MX
+    setprop persist.sys.timezone America/Mexico_City
+
+on property:persist.sys.locale=es-AR
+    setprop persist.sys.timezone America/Argentina/Buenos_Aires
+
+on property:persist.sys.locale=es-CO
+    setprop persist.sys.timezone America/Bogota
+
+on property:persist.sys.locale=es-CL
+    setprop persist.sys.timezone America/Santiago
+
+on property:persist.sys.locale=es-PE
+    setprop persist.sys.timezone America/Lima
+
+on property:persist.sys.locale=pt-BR
+    setprop persist.sys.timezone America/Sao_Paulo

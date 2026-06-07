@@ -1,0 +1,50 @@
+# TB375FC vendor convergence rules, from the permissive first-flash denial
+# capture. Each grant involves a vendor domain or vendor type (visible to the
+# vendor policy). Legitimate MTK HAL / daemon accesses seen on first boot.
+
+allow bootanim mtk_hal_mali_platform_default:binder { call };
+allow bootanim mtk_hal_mali_platform_default_service:service_manager { find };
+allow hal_fingerprint_default gfp_aservice:service_manager { find };
+allow hal_graphics_composer_default hal_graphics_allocator_default:binder { call };
+allow hal_graphics_composer_default hal_graphics_allocator_default_tmpfs:file { map read write };
+allow hal_graphics_composer_default mtk_hal_composer_ext_service:service_manager { add find };
+allow hal_graphics_composer_default mtk_hal_pq:binder { call transfer };
+allow hal_graphics_composer_default mtk_hal_pq:fd { use };
+allow hal_graphics_composer_default mtk_hal_pq_service:service_manager { find };
+allow hal_health_default sysfs:file { getattr open read };
+allow init hal_fingerprint_default:process { ptrace };
+allow init mnld_socket:sock_file { create setattr };
+allow init mtk_lbs_service:binder { call transfer };
+allow init wpa_wlan0_socket:sock_file { create setattr };
+allow init_insmod_sh init_insmod_sh:capability { sys_nice };
+allow init_insmod_sh init_insmod_sh:key { write };
+allow init_insmod_sh kernel:process { setsched };
+allow init_insmod_sh proc_cmdline:file { getattr open read };
+allow mtk_hal_audio sysfs_devinfo:file { open read };
+allow mtk_hal_camera sysfs_devinfo:file { open read };
+allow mtk_hal_power graphics_device:chr_file { ioctl open read write };
+allow mtk_hal_pq hal_graphics_composer_default:binder { call };
+allow mtk_hal_usb sysfs_udc:dir { search };
+allow nvram_daemon sysfs_dt_firmware_android:file { getattr open read };
+allow platform_app hal_dms_hwservice:hwservice_manager { find };
+allow platform_app hal_graphics_allocator_default_tmpfs:file { write };
+allow platform_app mtk_hal_mali_platform_default_service:service_manager { find };
+allow priv_app hal_graphics_allocator_default_tmpfs:file { write };
+allow priv_app mtk_hal_mali_platform_default_service:service_manager { find };
+allow surfaceflinger mtk_hal_mali_platform_default:binder { call };
+allow surfaceflinger mtk_hal_mali_platform_default_service:service_manager { find };
+allow system_app hal_dvs_hwservice:hwservice_manager { find };
+allow thermal_core sysfs_devinfo:file { open read };
+allow untrusted_app hal_graphics_allocator_default_tmpfs:file { write };
+allow untrusted_app mtk_hal_mali_platform_default_service:service_manager { find };
+
+# vold attempts FITRIM on the /mnt/vendor/persist mount during idle maintenance.
+# A core domain issuing ioctl on a vendor persist_data_file dir is neverallow'd
+# (system/sepolicy/private/domain.te), and persist is a tiny raw partition that
+# gains nothing from trimming, so suppress the benign denial rather than grant it.
+dontaudit vold persist_data_file:dir { ioctl };
+# MTK aed (/proc/aed, name=generate-oops) associates with the proc filesystem at boot.
+allow proc_aed proc:filesystem { associate };
+# Aperture (camera) opportunistically reads a vendor camera property; benign, mirrors
+# the existing surfaceflinger/audioserver/cameraserver dontaudit on vendor_default_prop.
+dontaudit untrusted_app vendor_default_prop:file { getattr map open read };

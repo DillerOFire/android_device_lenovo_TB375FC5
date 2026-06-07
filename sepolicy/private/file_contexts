@@ -1,0 +1,62 @@
+# thermald and batterywarning ship in /system_ext/bin on this device (system_ext
+# is its own partition, BOARD_USES_SYSTEM_EXTIMAGE). MTK base/private/file_contexts
+# labels them at /system/bin, which does not match the real path, so without these
+# entries the binaries keep the default system_ext label and stay in init:s0.
+/(system_ext|system/system_ext)/bin/thermald          u:object_r:thermald_exec:s0
+/(system_ext|system/system_ext)/bin/batterywarning    u:object_r:batterywarning_exec:s0
+/(system_ext|system/system_ext)/bin/hw/android\.hardware\.audio\.parameter_parser\.service    u:object_r:audio_vendor_parameter_parser_exec:s0
+# omservice is a Lenovo system_ext daemon (domain defined in omservice.te).
+/(system_ext|system/system_ext)/bin/omservice         u:object_r:omservice_exec:s0
+# mtk_plpath_utils sets up A/B preloader/bootloader block symlinks at boot (domain
+# in mtk_system_ext_daemons.te). Without this label it stays system_file and init
+# execs it unconfined (execute_no_trans denial).
+/(system_ext|system/system_ext)/bin/mtk_plpath_utils  u:object_r:mtk_plpath_utils_exec:s0
+
+# DRM KMS node minui opens in LOS recovery. Vendor file_contexts labels card0
+# dri_device for the running system, but vendor /dev labels are not installed
+# into the recovery ramdisk, so there card0 falls back to the generic device
+# type and the enforcing recovery domain cannot open it (blank recovery UI).
+# graphics_device is the type AOSP recovery.te already grants rw, matching the
+# Cuttlefish DRM reference. On the running system vendor dri_device wins by
+# load-order precedence, so this entry is effectively recovery-only.
+/dev/dri/card0    u:object_r:graphics_device:s0
+
+# Partition block devices for fastbootd in LOS recovery. Same situation as card0
+# above: vendor file_contexts labels these for the running system, but vendor
+# /dev labels are not installed into the recovery ramdisk, so in recovery they
+# fall back to generic block_device. The enforcing fastbootd domain holds allows
+# for the specific types (super_block_device_type, misc_block_device,
+# boot_block_device), so against generic block_device it is denied: it cannot
+# read super (empty partition list), misc (slot-count 0), or the boot images,
+# and stalls retrying. These mirror vendor's types, so the running system is
+# unaffected (vendor wins by load-order) and only recovery picks them up.
+# init_boot's real type init_boot_block_device is vendor-only and absent from
+# the recovery policy, so it rides boot_block_device here, which fastbootd
+# flashes identically. vbmeta is left generic (vendor-only type, no platform
+# equivalent, rarely flashed over fastboot).
+/dev/block/by-name/super                u:object_r:super_block_device:s0
+/dev/block/by-name/misc                 u:object_r:misc_block_device:s0
+/dev/block/by-name/metadata             u:object_r:metadata_block_device:s0
+/dev/block/by-name/md_udc               u:object_r:metadata_block_device:s0
+/dev/block/by-name/boot(_[ab])?         u:object_r:boot_block_device:s0
+/dev/block/by-name/vendor_boot(_[ab])?  u:object_r:boot_block_device:s0
+/dev/block/by-name/init_boot(_[ab])?    u:object_r:init_boot_block_device:s0
+/dev/block/by-name/dtbo(_[ab])?         u:object_r:dtbo_block_device:s0
+/dev/block/by-name/odmdtbo(_[ab])?      u:object_r:dtbo_block_device:s0
+
+# Platform-path forms. ueventd (devices.cpp:521) ALWAYS creates the canonical
+# /dev/block/platform/<ctrl>/by-name/<part> link, but the simple by-name link
+# above only when is_boot_device is set (devices.cpp:523), which MTK does not set
+# for these UFS partitions. So the by-name entries match no real node and it stays
+# generic block_device in recovery; these platform-path forms are what actually
+# relabel it, which is why update_engine was denied super and fastbootd never
+# enumerated. Same types as above, running system unaffected.
+/dev/block/platform/.*/by-name/super                u:object_r:super_block_device:s0
+/dev/block/platform/.*/by-name/misc                 u:object_r:misc_block_device:s0
+/dev/block/platform/.*/by-name/metadata             u:object_r:metadata_block_device:s0
+/dev/block/platform/.*/by-name/md_udc               u:object_r:metadata_block_device:s0
+/dev/block/platform/.*/by-name/boot(_[ab])?         u:object_r:boot_block_device:s0
+/dev/block/platform/.*/by-name/vendor_boot(_[ab])?  u:object_r:boot_block_device:s0
+/dev/block/platform/.*/by-name/init_boot(_[ab])?    u:object_r:init_boot_block_device:s0
+/dev/block/platform/.*/by-name/dtbo(_[ab])?         u:object_r:dtbo_block_device:s0
+/dev/block/platform/.*/by-name/odmdtbo(_[ab])?      u:object_r:dtbo_block_device:s0

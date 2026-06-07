@@ -1,0 +1,34 @@
+service interfaces.factoryInterface@1.0-service /vendor/bin/hw/interfaces.factoryInterface@1.0-service
+    class late_start
+    user system
+    group root system sdcard_rw sdcard_r media_rw radio camera
+    seclabel u:r:factory_services:s0
+
+service interfaces.factorySensor@1.0-service /vendor/bin/hw/interfaces.factorySensor@1.0-service
+    class hal
+    user system
+    group system
+    seclabel u:r:mtk_hal_sensors:s0
+
+service muxreport.close /vendor/bin/muxreport 3
+    class core
+    user radio
+    group radio cache inet misc
+    disabled
+    oneshot
+    seclabel u:r:muxreport:s0
+
+
+service muxreport.open /vendor/bin/muxreport 4
+    class core
+    user radio
+    group radio cache inet misc
+    disabled
+    oneshot
+    seclabel u:r:muxreport:s0
+
+on property:ro.factory_mode=0
+    setprop persist.vendor.factory.disable.acm true
+
+on property:ro.factory_mode=1
+    chmod 0664 /sys/kernel/debug/mtk_rtc/mtk_rtc

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Device VINTF compatibility matrix for TB375FC.
+
+    type="device" matches stock semantics: this matrix declares what the
+    VENDOR partition requires the FRAMEWORK to provide. Installed via
+    DEVICE_MATRIX_FILE into /vendor/etc/vintf/compatibility_matrix.xml.
+
+    The matrix is copied verbatim from stock A16 vendor extraction
+    (TB375FC_CN_OPEN_USER_M21.814_A16_ZUI_17.5.10.060_ST_260225) so the
+    runtime VINTF check has the same expectations as stock. Earlier we
+    shipped a hand-derived type="framework" matrix with 40 entries;
+    assemble_vintf stripped optional="true" from all of them, causing
+    every HAL to become required at boot and fail the vendor manifest
+    match. The 5 HIDL HALs declared here are AOSP infrastructure
+    services (sensorservice, allocator, manager, memory, token), the
+    two AIDL HALs are MTK extensions (mtksf_ext, mbrainj). vendor-ndk
+    version=34 anchors the API surface at Android 14.
+-->
+<compatibility-matrix version="7.0" type="device">
+    <hal format="hidl" optional="false">
+        <name>android.frameworks.sensorservice</name>
+        <version>1.0</version>
+    </hal>
+    <hal format="hidl" optional="false">
+        <name>android.hidl.allocator</name>
+        <version>1.0</version>
+    </hal>
+    <hal format="hidl" optional="false">
+        <name>android.hidl.manager</name>
+        <version>1.0</version>
+    </hal>
+    <hal format="hidl" optional="false">
+        <name>android.hidl.memory</name>
+        <version>1.0</version>
+    </hal>
+    <hal format="hidl" optional="false">
+        <name>android.hidl.token</name>
+        <version>1.0</version>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.framework.mtksf_ext</name>
+        <version>2</version>
+        <interface>
+            <name>IMtkSF_ext</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mbrainj</name>
+        <interface>
+            <name>IMBrainJava</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <vendor-ndk>
+        <version>34</version>
+    </vendor-ndk>
+</compatibility-matrix>

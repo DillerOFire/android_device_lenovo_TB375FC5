@@ -1,0 +1,29 @@
+# ============================================================================
+# vendor_mtk_prebuilt/ - vendor sepolicy decompiled from the stock MT6897 blob.
+#
+# Contents:
+#   mtk_proprietary.te   - vendor type/attribute declarations plus the
+#                          allow/dontaudit/typetransition/allowx rules, derived
+#                          from the stock vendor_sepolicy.cil.
+#   file_contexts        - vendor dev/sys/vendor labels. Any path also specified by
+#                          AOSP plat or the hand-written sepolicy/private + sepolicy/
+#                          vendor fragments is dropped here: those outrank this copy
+#                          and checkfc rejects duplicate path specs in the merged set.
+#   genfs_contexts       - genfscon entries
+#   property_contexts service_contexts hwservice_contexts seapp_contexts
+#   mac_permissions.xml  - deduped copies of the stock vendor_* context files
+#
+# Mechanically derived from the stock vendor sepolicy at
+# vendor/lenovo/TB375FC/proprietary/vendor/etc/selinux/. The precompiled stock
+# CIL is decompiled to source-form .te, then reconciled against the LOS plat
+# public/private split: the file_type/dev_type/domain base attributes that the
+# versioned stock attrs drop are re-derived, the empty hal_X_client/hal_X_server
+# pairs are declared as attributes, plat-type re-attributions are dropped, and a
+# small curated set of CTS-hygiene over-grants (which the precompiled path never
+# checked) is skipped or rewritten. file_contexts/genfs/service/hwservice/seapp
+# are deduped against the plat + hand-written sets; property_contexts and
+# mac_permissions.xml are deduped copies of the stock vendor_* files.
+#
+# Kept separate from sepolicy/vendor/ so a blob resync does not clobber the
+# hand-written overrides there.
+# ============================================================================

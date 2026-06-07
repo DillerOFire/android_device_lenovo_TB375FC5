@@ -1,0 +1,9 @@
+service vendor.mot.input-hal-1-1 /vendor/bin/hw/motorola.hardware.input@1.1-service
+    class hal
+    user system
+    group system input uhid
+    # will not be restarted if it exits until it is requested to be restarted
+    oneshot
+    # will only be started when requested
+    # disabled
+

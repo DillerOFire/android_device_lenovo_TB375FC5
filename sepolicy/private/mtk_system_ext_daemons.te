@@ -1,0 +1,63 @@
+# MTK system_ext daemons. Stock ships these via the prebuilt system_ext_sepolicy.cil;
+# LineageOS builds system_ext from source and the decompiled vendor policy does not
+# declare them, so they are declared and wired here. They run from /system_ext/bin,
+# so they are coredomain / system_file_type, mirroring the stock MTK policy.
+
+# thermald - /system_ext/bin/thermald
+type thermald, domain, coredomain;
+type thermald_exec, system_file_type, exec_type, file_type;
+type sysfs_thermald, fs_type, sysfs_type;
+init_daemon_domain(thermald)
+binder_use(thermald)
+binder_call(thermald, system_server)
+allow thermald activity_service:service_manager find;
+allow thermald sysfs_net:dir search;
+allow thermald sysfs_thermald:file r_file_perms;
+allow thermald shell_exec:file rx_file_perms;
+allow thermald toolbox_exec:file rx_file_perms;
+allow thermald proc_net:file r_file_perms;
+allow thermald devpts:chr_file rw_file_perms;
+allow thermald self:netlink_route_socket { create setopt bind getattr write nlmsg_read read nlmsg_write };
+allow thermald self:capability net_admin;
+
+# batterywarning - /system_ext/bin/batterywarning
+type batterywarning, domain, coredomain;
+type batterywarning_exec, system_file_type, exec_type, file_type;
+type sysfs_battery_warning, fs_type, sysfs_type;
+init_daemon_domain(batterywarning)
+binder_use(batterywarning)
+binder_call(batterywarning, system_server)
+allow batterywarning activity_service:service_manager find;
+allow batterywarning sysfs_battery_warning:file r_file_perms;
+allow batterywarning self:netlink_kobject_uevent_socket create_socket_perms_no_ioctl;
+
+# audio_vendor_parameter_parser - /system_ext/bin/hw/android.hardware.audio.parameter_parser.service
+type audio_vendor_parameter_parser, domain, coredomain;
+type audio_vendor_parameter_parser_exec, system_file_type, exec_type, file_type;
+type audio_vendor_parameter_parser_service, service_manager_type;
+init_daemon_domain(audio_vendor_parameter_parser)
+binder_service(audio_vendor_parameter_parser)
+add_service(audio_vendor_parameter_parser, audio_vendor_parameter_parser_service)
+binder_call(audioserver, audio_vendor_parameter_parser)
+binder_call(audio_vendor_parameter_parser, servicemanager)
+get_prop(audio_vendor_parameter_parser, system_audio_config_prop)
+allow audioserver audio_vendor_parameter_parser_service:service_manager find;
+
+# mtk_plpath_utils - /system_ext/bin/mtk_plpath_utils
+# Oneshot started "on boot" that sets vendor.mtk.* boot-link properties driving
+# init's A/B preloader/bootloader block symlinks (preloader_raw, rot_boot,
+# bootloader1/2). Those are OTA/recovery paths, not normal boot, so the binary is
+# not boot-critical. Stock transitions it into the update_engine domain on exec;
+# we confine it in its own coredomain instead, to avoid the update_engine
+# entrypoint neverallow in the from-source policy.
+type mtk_plpath_utils, domain, coredomain;
+type mtk_plpath_utils_exec, system_file_type, exec_type, file_type;
+init_daemon_domain(mtk_plpath_utils)
+# It then reads /dev/device-mapper and searches /dev/block to create the
+# preloader/bootloader mapper symlinks. Those are stock OTA/recovery aliases that
+# are unused on LOS (update_engine manages the A/B dynamic partitions; recovery
+# addresses partitions by name), and a system_ext util must not hold device-mapper
+# write. The device boots and runs normally without them (verified under
+# enforcing), so suppress the benign denials rather than grant dm access.
+dontaudit mtk_plpath_utils block_device:dir search;
+dontaudit mtk_plpath_utils dm_device:chr_file { read write };

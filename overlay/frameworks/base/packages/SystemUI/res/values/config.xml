@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!--
+        Default Quick Settings tile order on first boot / after reset.
+        Mirrors the LOS-default set (internet, bt, dnd, cast, flashlight,
+        airplane, rotation, wallet, alarm, controls, screenrecord, battery)
+        with Dolby Atmos appended so users don't have to manually drag it
+        out of the "available tiles" tray. The custom() syntax is the
+        standard AOSP way to include a third-party TileService in the
+        default list.
+
+        Note: this only affects fresh installs / wipes. Existing devices
+        with Settings.Secure.SYSUI_QS_TILES already populated keep their
+        chosen order.
+    -->
+    <string-array name="quick_settings_tiles_default" translatable="false">
+        <item>internet</item>
+        <item>bt</item>
+        <item>dnd</item>
+        <item>cast</item>
+        <item>flashlight</item>
+        <item>airplane</item>
+        <item>rotation</item>
+        <item>wallet</item>
+        <item>alarm</item>
+        <item>controls</item>
+        <item>screenrecord</item>
+        <item>battery</item>
+        <item>custom(com.dolby.daxservice/.DaxTileService)</item>
+    </string-array>
+</resources>

@@ -1,0 +1,111 @@
+# Enforcing-convergence rules: accesses the stock vendor policy granted that the
+# decompiled-to-source vendor policy does not re-emit.
+#
+# Scope: only unambiguous vendor-internal grants. The coredomain public-property
+# reads (surfaceflinger/zygote/bootanim to vendor_mtk_gpu_prop) are intentionally not
+# here; those props still carry a conflicting vendor_restricted_property_type from the
+# decompiled stock policy, so the correct fix is in the property labeling (stop emitting
+# the restricted attribute on props exposed as public), not a raw allow.
+
+# --- vendor HAL / daemon domains reading their own vendor props ---
+get_prop(mtk_hal_audio, vendor_mtk_default_prop)
+get_prop(mtk_hal_audio, vendor_mtk_wmt_prop)
+get_prop(mnld, vendor_mtk_default_prop)
+get_prop(mnld, vendor_mtk_wmt_prop)
+get_prop(mtk_hal_bluetooth, vendor_dynamicdata_prop)
+get_prop(mtk_hal_bluetooth, vendor_mtk_service_nvram_init_prop)
+get_prop(mtk_hal_c2, vendor_mtk_pq_ro_prop)
+get_prop(mtk_hal_c2, vendor_mtk_sec_video_path_support_prop)
+get_prop(mtk_hal_c2, vendor_mtk_video_prop)
+get_prop(mtk_hal_camera, camera_config_prop)
+get_prop(mtk_hal_camera, vendor_mtk_emcamera_prop)
+get_prop(mtk_hal_camera, vendor_mtk_gpu_prop)
+get_prop(mtk_hal_mmlpq, boot_status_prop)
+get_prop(mtk_hal_mmlpq, vendor_mtk_pq_ro_prop)
+get_prop(mtk_hal_pq, vendor_mtk_aal_ro_prop)
+get_prop(hal_sensors_default, vendor_mtk_sensor_prop)
+get_prop(hal_graphics_composer_default, vendor_mtk_aod_support_prop)
+get_prop(hal_graphics_composer_default, vendor_mtk_gpu_prop)
+get_prop(hal_graphics_composer_default, vendor_mtk_mdp_debug_log_prop)
+get_prop(hal_graphics_composer_default, vendor_mtk_pq_prop)
+get_prop(hal_graphics_composer_default, vendor_mtk_sec_video_path_support_prop)
+get_prop(hal_graphics_allocator_default, vendor_mtk_gpu_prop)
+get_prop(hal_bootctl_default, vendor_dynamicdata_prop)
+get_prop(conninfra_loader, vendor_mtk_coredump_prop)
+get_prop(nvram_daemon, vendor_dynamicdata_prop)
+get_prop(nvram_daemon, vendor_mtk_wmt_prop)
+get_prop(read_cc, vendor_dynamicdata_prop)
+get_prop(wlan_assistant, vendor_mtk_service_wifi_nvram_prop)
+get_prop(DcxoSetCap, vendor_dynamicdata_prop)
+get_prop(vendor_init, vendor_mtk_printk_prop)
+
+# --- fsck incidentally stats vendor data mount points during its scan; coredomain ->
+#     vendor data_file is neverallow'd (domain.te:1091/1603) and boot succeeds without it,
+#     so silence rather than grant ---
+dontaudit fsck { nvcfg_file nvdata_file persist_data_file protect_f_data_file protect_s_data_file }:dir getattr;
+dontaudit fsck mnt_vendor_file:dir search;
+
+# --- incidental binder to init (neverallow'd to grant, domain.te:735; benign, silence) ---
+dontaudit mtk_lbs_service init:binder call;
+dontaudit servicemanager init:binder transfer;
+
+# --- benign rootfs statfs from apps: silence, do not grant ---
+dontaudit untrusted_app unlabeled:filesystem getattr;
+
+# Core graphics/media services read the same public vendor props apps do (appdomain is in
+# app_vendor_props.te). vendor_restricted_property_type carries no neverallow, so the
+# vendor_public_property_type exemption is sufficient - just grant the reads.
+allow { surfaceflinger bootanim zygote system_server cameraserver } vendor_public_property_type:file { getattr map open read };
+
+# SF/audioserver/cameraserver also poke the catch-all vendor_default_prop, which is NOT
+# public and cannot be granted to coredomain (neverallow property.te:189/196); boot
+# survives without it, so silence.
+dontaudit { surfaceflinger audioserver cameraserver } vendor_default_prop:file { getattr map open read };
+
+# hal_graphics_composer_default IS a full client of the gralloc allocator on this MTK gralloc
+# (live capture: it binds the HIDL hal_graphics_allocator_hwservice to allocate composition
+# buffers - the real enforcing boot wall, 56 hits). hal_client_domain grants that hwservice
+# find, the AIDL allocator service, the binder call, AND the mapper service find (allocator
+# clients hold it) in one idiomatic rule, replacing the earlier piecemeal composer allows.
+hal_client_domain(hal_graphics_composer_default, hal_graphics_allocator)
+# Apps also query the mapper service but fall back to the passthrough mapper; appdomain
+# cannot hold a hal_service find (neverallow), so silence.
+dontaudit { appdomain -isolated_app } hal_graphics_mapper_service:service_manager find;
+dontaudit init mtk_hal_lbs_service:service_manager find;
+
+# vendor_init / fingerprint touch plat props (config_prop/default_prop/system_prop) at
+# boot - all neverallow'd for vendor to set/read, boot survives without them, so silence
+# rather than grant (retype the specific prop later only if a feature actually needs it).
+get_prop(vendor_init, vts_status_prop)
+dontaudit vendor_init config_prop:property_service set;
+dontaudit vendor_init default_prop:property_service set;
+dontaudit vendor_init default_prop:file { read open };
+dontaudit hal_fingerprint_default system_prop:property_service set;
+dontaudit hal_fingerprint_default system_prop:file { read open };
+
+# Boot-path framework-to-vendor GPU grants.
+# system_server is the framework client of the Mali platform GPU-compression HAL (AIDL
+# arm.mali.platform.ICompression). This call plus system_server's vendor_mtk_gpu_prop read
+# (added to the public-prop grant above) was the actual enforcing boot hang.
+allow system_server mtk_hal_mali_platform_default_service:service_manager find;
+binder_call(system_server, mtk_hal_mali_platform_default)
+# vendor daemons reading their own props / proc at boot
+get_prop(nvram_lenovo, vendor_dynamicdata_prop)
+allow nvram_lenovo proc_bootconfig:file r_file_perms;
+# These three are AOSP-neverallow'd and cannot be granted without deleting an AOSP
+# neverallow (vendor->plat default_prop, property.te:164/272; vendor_init->vendor_userdir is
+# vold's domain, vold.te:408; coredomain->vendor data, domain.te:1091). None affect boot:
+# vold mounts persist via the block device, vold (not vendor_init) owns vendor_userdir
+# creation, and the camera prop is plat-private. Silence the benign noise.
+dontaudit mtk_hal_camera default_prop:file { getattr map open read };
+dontaudit vendor_init vendor_userdir_file:dir { add_name write remove_name };
+dontaudit vold persist_data_file:dir { read getattr search open };
+
+# Non-boot denials: benign vendor overreach, silenced rather than granted.
+# nvram_lenovo tries to set a plat system_prop (neverallow'd vendor->system_prop); a vendor
+# daemon overreaching - silence (retype the specific prop in a later pass if it matters).
+dontaudit nvram_lenovo system_prop:property_service set;
+# Dolby DAX (dms) and Vision (dvs) HAL access is restored properly in tb375fc_dolby.te by
+# rejoining platform_app/system_app to the hal_dms_client/hal_dvs_client attributes the
+# de-hack dropped (matches stock). The earlier dontaudits here masked that regression and
+# were removed; the binder calls are now granted, not silenced.

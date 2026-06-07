@@ -1,0 +1,17 @@
+service nvram_daemon /vendor/bin/nvram_daemon
+    class core
+    user root
+    group system radio wifi audio bluetooth media
+    oneshot
+
+#+Bug PERIDOT-348 fanjh5 20240314 Add the property ro.odm.lenovo.btaddr to read bluetooth mac address when the bluetooth is turned off
+service nvram_lenovo /vendor/bin/nvram_lenovo
+    user root
+    group system
+    oneshot
+    disabled
+
+on property:sys.boot_completed=1
+   chmod 0644 /vendor/bin/nvram_lenovo
+   start nvram_lenovo
+#-Bug PERIDOT-348 fanjh5 20240214 Add the property ro.odm.lenovo.btaddr to read bluetooth mac address when the bluetooth is turned off

@@ -1,0 +1,18 @@
+on early-init
+    # Change AOSP default tcp congestion control from cubic to bic.
+    write /proc/sys/net/ipv4/tcp_congestion_control bic
+
+    # Start MTU probing when a black hole is detected.
+    write /proc/sys/net/ipv4/tcp_mtu_probing 1
+
+    # Turn off hybrid slow start algorithm.
+    write /sys/module/tcp_cubic/parameters/hystart 0
+
+    # Slow start threshold 0 -> 1400.
+    write /sys/module/tcp_cubic/parameters/initial_ssthresh 1400
+
+    # Enable nf_conntrack_helper for active-mode FTP over USB tethering.
+    write /proc/sys/net/netfilter/nf_conntrack_helper 1
+
+    # gro_normal_batch=1 to avoid accumulated packet timeouts at low throughput.
+    # write /proc/sys/net/core/gro_normal_batch 1

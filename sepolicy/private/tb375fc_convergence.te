@@ -1,0 +1,10 @@
+# TB375FC plat-private convergence rules, from the permissive first-flash denial
+# capture. Grants where a core/plat domain reaches a plat-public target.
+
+allow init servicemanager:binder { call };
+allow init sysfs_devices_block:file { open write };
+allow kcmdlinectrl sysfs_dt_firmware_android:file { getattr open read };
+allow misctrl sysfs_dt_firmware_android:file { getattr open read };
+allow mtectrl sysfs_dt_firmware_android:file { getattr open read };
+allow vendor_init proc:file { write };
+allow vendor_init proc_watermark_boost_factor:file { write };

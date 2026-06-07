@@ -1,0 +1,4 @@
+service factory_aidl_service /vendor/bin/hw/vendor.lenovo.hardware.factory-service
+    class hal
+    user system
+    group system

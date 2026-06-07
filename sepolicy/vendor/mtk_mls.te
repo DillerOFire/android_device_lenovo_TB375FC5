@@ -1,0 +1,10 @@
+# MTK MLS attributions the from-source de-hack drops that AOSP plat does not provide.
+# clean_decompile strips vendor re-attributions of plat-owned types, which is correct for
+# the ~85 that AOSP already marks mlstrustedobject/mlstrustedsubject. These two are MTK
+# additions AOSP lacks, and are load-bearing:
+#   hal_graphics_allocator_default_tmpfs: MTK gralloc hands its tmpfs buffer to apps, so an
+#     app at its per-app MLS level (s0:cN) must write a buffer the HAL labels at s0. Without
+#     mlstrustedobject the cross-level write is denied and the screen blanks under enforcing.
+#   mediacodec: MTK marks it mlstrustedsubject for cross-level codec buffer access.
+typeattribute hal_graphics_allocator_default_tmpfs mlstrustedobject;
+typeattribute mediacodec mlstrustedsubject;

@@ -1,0 +1,47 @@
+# Dolby DAX (dms) and Dolby Vision (dvs) HAL client memberships restored from stock.
+#
+# The vendor-CIL de-hack kept only one member of each Dolby client attribute (mtk_hal_audio
+# in hal_dms_client, vendorcodec in hal_dvs_client) and dropped every other member. Under
+# enforcing this broke Dolby: the client domains could find the HAL hwservice (the de-hack
+# kept that allow) but could not binder-call into it, so com.dolby.daxservice (platform_app)
+# and com.dolby.dolbyvisionservice (system_app) looped on "unable to call into hwbinder
+# service" then aborted, and the audioserver/mediacodec/system_server audio paths would hit
+# the same wall on playback.
+#
+# Restored verbatim from the stock A16 policy (sesearch of the loaded /sys/fs/selinux/policy
+# on the TB373FU sibling): hal_dms_client = { audioserver hal_audio_default mediacodec
+# mtk_hal_audio platform_app system_server }, hal_dvs_client = { platform_app system_app
+# vendorcodec }. Both attributes already carry the find + binder {call transfer} + fd use
+# ruleset in mtk_proprietary.te, so joining the attribute is the full grant, identical to
+# stock. No app to vendor-HAL neverallow is instantiated for these HALs (the de-hack emitted
+# raw allows, not the hal_attribute_hwservice macro).
+#
+# Placement: this file lives in sepolicy/vendor_mtk_prebuilt (not sepolicy/vendor) on purpose.
+# typeattribute requires its attribute already declared, and hal_dms_client/hal_dvs_client are
+# declared in mtk_proprietary.te. The build concatenates BOARD_VENDOR_SEPOLICY_DIRS in order
+# (sepolicy/vendor first, then sepolicy/vendor_mtk_prebuilt) and sorts .te files within a dir,
+# so a file named after "mtk_proprietary.te" here compiles after those declarations. In
+# sepolicy/vendor checkpolicy errors with "attribute hal_dms_client is not declared".
+
+# hal_dms_client (mtk_hal_audio already joined in mtk_proprietary.te):
+typeattribute audioserver hal_dms_client;
+typeattribute hal_audio_default hal_dms_client;
+typeattribute mediacodec hal_dms_client;
+typeattribute platform_app hal_dms_client;
+typeattribute system_server hal_dms_client;
+
+# hal_dvs_client (vendorcodec already joined in mtk_proprietary.te):
+typeattribute platform_app hal_dvs_client;
+typeattribute system_app hal_dvs_client;
+
+# Dolby DAX AIDL service (vendor.dolby.dms.IDms). A16 exposes Dolby audio over an
+# AIDL service alongside the legacy HIDL hal_dms_hwservice. The de-hack left the
+# AIDL instance unlabeled (default_android_service), so com.dolby.daxservice
+# (platform_app) was denied find under enforcing. Label it and grant find, mirroring
+# the Dolby Vision dvs_aidl_service already in service_contexts. hal_dms_default (the
+# Dolby DAX HAL) registers it.
+type dms_aidl_service;
+typeattribute dms_aidl_service service_manager_type;
+typeattribute dms_aidl_service hal_service_type;
+allow platform_app dms_aidl_service:service_manager find;
+allow hal_dms_default dms_aidl_service:service_manager { add find };

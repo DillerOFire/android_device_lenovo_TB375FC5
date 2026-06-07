@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+# Pre-create /lenovocust mount point before mount_all --early.
+#
+# Lenovo's vendor init.mt6897.rc:
+#   on fs
+#     mount_all --early       <- tries to mount /dev/block/by-name/lenovocust
+#   on late-fs
+#     mkdir /lenovocust       <- too late, mount already attempted
+#
+# Stock A16 ships its own init binary that auto-creates mount-point dirs
+# inside fs_mgr before mounting. AOSP/LOS init does NOT, so mount_all --early
+# silently fails for /lenovocust, the partition never mounts, and PQ services
+# return bogus state because they can't load per-panel color tables from
+# /lenovocust/disp_pq/. Without PQ, HWC drops every composition job as "no
+# visible layer" and the boot animation never reaches the panel.
+#
+# Fix: mkdir the mount point in on early-fs (before any mount_all), so
+# Lenovo's mount_all --early in on fs finds it. Permissions match Lenovo's
+# late-fs mkdir (0777 system system).
+
+on early-fs
+    mkdir /lenovocust 0777 system system

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Device VINTF manifest for TB375FC (Lenovo Xiaoxin Pad Pro 12.7 2025, MT6897).
+
+    target-level=8 matches stock A16 PRC (FCM 8, AOSP main contract).
+    Verified against SPFT readback of stock A16: all 10 FP HAL files
+    byte-identical to TB373FU A16 ROW vendor extraction, IFingerprint v3
+    at /default instance, target-level=8.
+
+    HAL fragments merge in from /vendor/etc/vintf/manifest/*.xml at build
+    time, so this top-level manifest only declares headline HAL info.
+
+    FP HAL pairing note: A14/A15 archive binary at
+    proprietary/.archive/android.hardware.biometrics.fingerprint-service.a14_v2_f9f02ce2
+    available as fallback if a future LineageOS framework requires v2
+    semantics or A16 v3 ever fails against this device's TEE.
+-->
+<manifest version="2.0" type="device" target-level="8">
+    <sepolicy>
+        <version>202504</version>
+    </sepolicy>
+</manifest>

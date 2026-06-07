@@ -1,0 +1,6 @@
+# Stub for prebuilt Widevine L1 APEX (/vendor/apex/com.google.android.widevine.nonupdatable.apex).
+# LOS 23 base sepolicy does not declare these types; apex_sepolicy_tests rejects
+# the APEX during packaging without them. Runtime ruleset comes from stock CIL.
+
+type hal_drm_widevine, domain;
+type hal_drm_widevine_exec, exec_type, vendor_file_type, file_type;

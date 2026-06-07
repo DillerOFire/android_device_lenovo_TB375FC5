@@ -1,0 +1,5 @@
+# omservice (/system_ext/bin/omservice) is a Lenovo system_ext daemon that is
+# not covered by sepolicy_vndr or the prebuilt vendor policy, so it otherwise
+# runs in init:s0. Domain type declared here; transition set up in private.
+type omservice, domain;
+type omsvc_service, app_api_service, system_api_service, service_manager_type;

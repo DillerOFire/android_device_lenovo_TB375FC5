@@ -1,0 +1,10 @@
+# system_ext-side enforcing fixes (these domains live in system_ext and are not visible to
+# the vendor policy, so they cannot go in sepolicy/vendor/tb375fc_enforcing.te).
+#
+# batterywarning (Lenovo /system_ext/bin/batterywarning) reads
+# /sys/devices/platform/charger/BatteryNotify directly. As a system_ext/platform domain it is
+# neverallow'd from battery sysfs (AOSP: platform should read battery state via the health
+# HAL, not raw sysfs), so this access cannot be granted without deleting an AOSP neverallow.
+# It is non-boot and benign. The correct long-term fix is re-routing the Lenovo daemon through
+# the health HAL - a vendor-blob behaviour change, out of sepolicy scope. Silence the noise.
+dontaudit batterywarning sysfs:file { getattr open read };
