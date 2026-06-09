@@ -218,7 +218,6 @@ PRODUCT_SYSTEM_PROPERTIES += \
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.pen.bluetooth_key.support=1 \
     ro.vendor.config.lgsi.pen.event.name=touch-pen \
-    ro.vendor.config.lgsi.pen_info=0x617F:0x17EF:Lenovo Tab Pen Plus \
     ro.vendor.config.lgsi.pen.compat.project=1
 
 # Lenovo platform identity common to both SKUs. The SKU-specific fields -

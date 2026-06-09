@@ -50,8 +50,7 @@ PRODUCT_MODEL := TB375FC
 # lineage_TB373FU.mk.
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.hw.version=TB375FC \
-    ro.vendor.config.lgsi.ota.model=TB375FC_PRC \
-    ro.vendor.config.lgsi.en.market_name=Lenovo Xiaoxin Pad Pro 12.7
+    ro.vendor.config.lgsi.ota.model=TB375FC_PRC
 PRODUCT_MANUFACTURER := Lenovo
 PRODUCT_CHARACTERISTICS := tablet
 

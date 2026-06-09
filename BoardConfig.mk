@@ -129,6 +129,11 @@ TARGET_PREBUILT_KERNEL  := $(DEVICE_PATH)/prebuilts/Image.gz
 TARGET_NEEDS_DTBOIMAGE  := true
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo_TB375FC.img
 
+# Vendor props whose values contain spaces (marketname, pen name). They are set
+# via a verbatim prop file because PRODUCT_VENDOR_PROPERTIES word-splits a value
+# at every space. The TB373FU variant overrides this with its own ROW vendor.prop.
+TARGET_VENDOR_PROP := $(DEVICE_PATH)/vendor.prop
+
 # Vendor security patch level. The vendor partition is the stock TB375FC PRC A16
 # extraction, whose vendor SPL is 2024-10-05. Without this
 # ro.vendor.build.security_patch is empty and Settings reports the vendor patch
