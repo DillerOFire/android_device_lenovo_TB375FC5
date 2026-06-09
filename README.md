@@ -8,13 +8,13 @@ LineageOS 23.2 (Android 16) device tree for the Lenovo Xiaoxin Pad Pro 12.7 (202
 |-----------|--------|
 | SoC | MediaTek Dimensity 8300 (MT6897) |
 | GPU | Mali-G615 |
-| RAM / Storage | 12 GB / 256 GB |
+| RAM / Storage | 8 GB / 128 GB, 8 GB / 256 GB, or 12 GB / 256 GB (UFS) |
 | Display | 12.7" 3K (2944 x 1840) IPS LCD, 144 Hz (capped to 120, see Notes) |
 | Battery | ~10200 mAh |
-| Connectivity | Wi-Fi 7, Bluetooth 5.4 (MediaTek connsys), no cellular |
+| Connectivity | Wi-Fi 6E, Bluetooth 5.4 (MediaTek connsys), no cellular |
 | Cameras | 13 MP rear, 8 MP front |
 | Fingerprint | Goodix |
-| Stylus | Lenovo active pen |
+| Stylus | Lenovo Tab Pen Plus (active pen) |
 | Stock | Android 16 (ZUXOS 1.5.10.060); launched on Android 14 (API 34) |
 
 ## Build
@@ -32,19 +32,20 @@ lunch lineage_TB375FC-bp4a-user
 mka bacon
 ```
 
-Kernel, DTB and modules ship prebuilt in the device tree, so there is no kernel source repo to clone.
+Kernel, DTB and modules ship prebuilt in the device tree (`prebuilts/`), so no kernel source is needed to build. The from-source 6.1 kernel that produced them is published separately as `android_device_lenovo_TB375FC-kernel` for reference and reproducibility; the build does not consume it.
 
 ### local_manifests/TB375FC.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <project name="YOUR_GH/android_device_lenovo_TB375FC" path="device/lenovo/TB375FC" remote="github" revision="lineage-23.2" />
-  <project name="YOUR_GH/android_vendor_lenovo_TB375FC" path="vendor/lenovo/TB375FC" remote="github" revision="lineage-23.2" />
+  <project name="LosSantosPro/android_device_lenovo_TB375FC" path="device/lenovo/TB375FC" remote="github" revision="lineage-23.2" />
+  <project name="LosSantosPro/android_vendor_lenovo_TB375FC" path="vendor/lenovo/TB375FC" remote="github" revision="lineage-23.2" />
+  <project name="LineageOS/android_hardware_mediatek" path="hardware/mediatek" remote="github" revision="lineage-23.2" />
 </manifest>
 ```
 
-Replace `YOUR_GH` with your GitHub user/org.
+`hardware/mediatek` is the upstream LineageOS common tree (the device inherits it). For the ROW (global) sibling, use `android_device_lenovo_TB373FU` and `lunch lineage_TB373FU-bp4a-user` instead - see that tree's README.
 
 ## Notes
 
