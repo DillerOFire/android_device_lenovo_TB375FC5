@@ -416,6 +416,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
     pmic_lbat_service.ko \
     pmic_lvsys_notify.ko \
     reset-ti-syscon.ko \
+    reboot-mode.ko \
+    syscon-reboot-mode.ko \
     adsp.ko \
     mtk_slbc.ko \
     slbc_mt6897.ko \
