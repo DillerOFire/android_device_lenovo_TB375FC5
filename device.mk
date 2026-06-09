@@ -13,6 +13,16 @@ DEVICE_PATH := device/lenovo/TB375FC
 # resolve mediatek-common.
 PRODUCT_SOONG_NAMESPACES += hardware/mediatek
 
+# The official hardware/mediatek tree builds the memtrack/thermal/vibrator HALs
+# and the perf/power client libs from source. TB375FC/TB373FU ship all of these
+# as prebuilt vendor blobs, so opt out of the source builds (otherwise the source
+# module and the prebuilt collide on the vendor partition). These flags are read
+# by select() in hardware/mediatek/{aidl/*,libmtkperf_client}/Android.bp.
+$(call soong_config_set,mediatek_hardware,use_prebuilt_memtrack,true)
+$(call soong_config_set,mediatek_hardware,use_prebuilt_thermal,true)
+$(call soong_config_set,mediatek_hardware,use_prebuilt_vibrator,true)
+$(call soong_config_set,mediatek_hardware,use_prebuilt_perf,true)
+
 $(call inherit-product, hardware/mediatek/overlay/mssi.mk)
 $(call inherit-product, hardware/mediatek/frameworks/mediatek-frameworks.mk)
 $(call inherit-product, hardware/lineage/compat/frameworks/compat.mk)
@@ -211,15 +221,17 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.pen_info=0x617F:0x17EF:Lenovo Tab Pen Plus \
     ro.vendor.config.lgsi.pen.compat.project=1
 
-# Lenovo platform identity (matches stock A16 TB375FC PRC vendor build.prop).
+# Lenovo platform identity common to both SKUs. The SKU-specific fields -
+# hw.version, ota.model, region, en.market_name - are set per-product in
+# lineage_TB375FC.mk / lineage_TB373FU.mk, because this lgsi block MUST agree
+# with ro.product.device: the PRC lgsi values over a TB373FU device name make
+# the region-aware vendor PQ stall before the panel comes up (boot hang).
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.project=peridot \
     ro.vendor.config.lgsi.device.type=pad \
     ro.vendor.config.lgsi.device.nettype=wifi \
     ro.vendor.config.lgsi.platform=mtk \
-    ro.vendor.config.lgsi.hw.version=TB375FC \
     ro.vendor.config.lgsi.cpuinfo=MediaTek Dimensity 8300 \
-    ro.vendor.config.lgsi.ota.model=TB375FC_PRC \
     ro.vendor.config.lgsi.carrier=open \
     ro.vendor.config.lgsi.bqb_cert=no \
     ro.vendor.config.lgsi.wfa_cert=no \
@@ -228,7 +240,6 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.camerainfo=Lgsi-Common-Camera \
     ro.vendor.config.lgsi.cmitid=CMIT_ID-LGSIU-2023 \
     ro.vendor.config.lgsi.aod.support=0 \
-    ro.vendor.config.lgsi.en.market_name=Lenovo Xiaoxin Pad Pro 12.7 \
     ro.vendor.mediatek.version.branch=alps-mp-u0.mp1 \
     ro.vendor.mediatek.version.release=alps-mp-u0.mp1.rc-V8.14_lenovo.p12.u0mp1rc.tb8792p1.64_P13
 

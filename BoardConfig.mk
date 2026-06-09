@@ -127,7 +127,7 @@ TARGET_KERNEL_CONFIG    :=
 TARGET_KERNEL_SOURCE    :=
 TARGET_PREBUILT_KERNEL  := $(DEVICE_PATH)/prebuilts/Image.gz
 TARGET_NEEDS_DTBOIMAGE  := true
-BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo_TB375FC.img
 
 # Vendor security patch level. The vendor partition is the stock TB375FC PRC A16
 # extraction, whose vendor SPL is 2024-10-05. Without this

@@ -44,6 +44,14 @@ PRODUCT_DEVICE := TB375FC
 PRODUCT_NAME := lineage_TB375FC
 PRODUCT_BRAND := Lenovo
 PRODUCT_MODEL := TB375FC
+
+# PRC SKU identity. The lgsi block MUST agree with PRODUCT_DEVICE (see the note
+# in device.mk) - these are the PRC-region counterparts of the ROW values in
+# lineage_TB373FU.mk.
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.vendor.config.lgsi.hw.version=TB375FC \
+    ro.vendor.config.lgsi.ota.model=TB375FC_PRC \
+    ro.vendor.config.lgsi.en.market_name=Lenovo Xiaoxin Pad Pro 12.7
 PRODUCT_MANUFACTURER := Lenovo
 PRODUCT_CHARACTERISTICS := tablet
 
