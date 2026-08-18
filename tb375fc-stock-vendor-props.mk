@@ -36,6 +36,16 @@
 #     Cleanup of cellular binaries/libs/init.rc files is NOT done here;
 #     those stay at stock because the libs cross-link with non-cellular
 #     subsystems via libmipc.
+#
+# Bluetooth note: these props are read literally by the AOSP Bluetooth stack
+# (not the stock ZUI MTK vendor stack). Additions below this header:
+#   - bluetooth.profile.a2dp.source.enabled=true / hfp.ag / hfp.hf: classic
+#     A2DP source + HFP headset profiles. Without them A2DP/HEADSET never start
+#     -> earbuds pair (GATT/SMP) but produce no audio (l2c_link_timeout).
+#   - persist.bluetooth.a2dp_offload.disabled=false: stock set true, but the
+#     AOSP stack has no software audio.a2dp.so encoder built, so it must use the
+#     installed audio.bluetooth.default.so offload HAL. Otherwise AudioFlinger
+#     logs "loadHwModule() error -22 loading module a2dp".
 
 PRODUCT_VENDOR_PROPERTIES += \
     aaudio.mmap_exclusive_policy=2 \
@@ -55,6 +65,9 @@ PRODUCT_VENDOR_PROPERTIES += \
     bluetooth.profile.mcp.server.enabled=false \
     bluetooth.profile.sap.server.enabled=true \
     bluetooth.profile.vcp.controller.enabled=false \
+    bluetooth.profile.a2dp.source.enabled=true \
+    bluetooth.profile.hfp.ag.enabled=true \
+    bluetooth.profile.hfp.hf.enabled=true \
     camera.disable_zsl_mode=1 \
     dalvik.vm.dex2oat64.enabled=true \
     dalvik.vm.finalizer-timeout-ms=40000 \
@@ -364,7 +377,7 @@ PRODUCT_VENDOR_PROPERTIES += \
     persist.sys.dalvik.vm.lib.2=libart.so \
     persist.system.powerhal.applist_enable=1 \
     persist.bluetooth.a2dp_offload.cap=sbc-aac \
-    persist.bluetooth.a2dp_offload.disabled=true \
+    persist.bluetooth.a2dp_offload.disabled=false \
     persist.bluetooth.leaudio_offload.disabled=true \
     persist.vendor.audio.usb.offload=false \
     persist.vendor.bluetooth.broadcaster.enabled=false \
