@@ -13,6 +13,15 @@ DEVICE_PATH := device/lenovo/TB375FC
 # resolve mediatek-common.
 PRODUCT_SOONG_NAMESPACES += hardware/mediatek
 
+# Stock Lenovo prebuilt android.hardware.thermal-service.mediatek links
+# pixel-power-ext-V1-ndk.so + pixelatoms-cpp.so (device-tree prebuilt libs at
+# prebuilts/vendor/Android.bp). PRODUCT_PACKAGES here is what makes Soong
+# install them to vendor/lib64; without it the prebuilt service fails to exec
+# -> IThermal/default never registers -> bootloop.
+PRODUCT_PACKAGES += \
+    pixel-power-ext-V1-ndk \
+    pixelatoms-cpp
+
 # The official hardware/mediatek tree builds the memtrack/thermal/vibrator HALs
 # and the perf/power client libs from source. TB375FC/TB373FU ship all of these
 # as prebuilt vendor blobs, so opt out of the source builds (otherwise the source
