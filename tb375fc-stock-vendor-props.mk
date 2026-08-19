@@ -42,10 +42,11 @@
 #   - bluetooth.profile.a2dp.source.enabled=true / hfp.ag / hfp.hf: classic
 #     A2DP source + HFP headset profiles. Without them A2DP/HEADSET never start
 #     -> earbuds pair (GATT/SMP) but produce no audio (l2c_link_timeout).
-#   - persist.bluetooth.a2dp_offload.disabled=false: stock set true, but the
-#     AOSP stack has no software audio.a2dp.so encoder built, so it must use the
-#     installed audio.bluetooth.default.so offload HAL. Otherwise AudioFlinger
-#     logs "loadHwModule() error -22 loading module a2dp".
+#   - persist.bluetooth.a2dp_offload.disabled=true: KEEP stock. ON THIS MTK
+#     DEVICE the A2DP hardware-offload datapath cannot establish under the AOSP
+#     stack (the offload session ends immediately), so forcing offload OFF
+#     (=true, or the dev-setting toggle) is what makes the software datapath
+#     actually play audio. Do NOT flip this to false — verified silent.
 
 PRODUCT_VENDOR_PROPERTIES += \
     aaudio.mmap_exclusive_policy=2 \
@@ -377,7 +378,7 @@ PRODUCT_VENDOR_PROPERTIES += \
     persist.sys.dalvik.vm.lib.2=libart.so \
     persist.system.powerhal.applist_enable=1 \
     persist.bluetooth.a2dp_offload.cap=sbc-aac \
-    persist.bluetooth.a2dp_offload.disabled=false \
+    persist.bluetooth.a2dp_offload.disabled=true \
     persist.bluetooth.leaudio_offload.disabled=true \
     persist.vendor.audio.usb.offload=false \
     persist.vendor.bluetooth.broadcaster.enabled=false \
