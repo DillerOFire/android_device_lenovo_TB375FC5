@@ -848,7 +848,12 @@ BOARD_VENDOR_KERNEL_MODULES_LOAD := \
     pmic_tia.ko
 
 # system_dlkm modules (alphabetical)
-BOARD_SYSTEM_DLKM_KERNEL_MODULES := \
+# NOTE: the build system (build/make/core/Makefile build-image-kernel-modules-dir)
+# reads BOARD_SYSTEM_KERNEL_MODULES for the SYSTEM image; with
+# BOARD_USES_SYSTEM_DLKMIMAGE=true the modules land in system_dlkm. The
+# BOARD_SYSTEM_DLKM_* name was wrong -> all 60 modules (incl. zram.ko,
+# zsmalloc.ko) were silently dropped from the image (fixed 2026-08-19).
+BOARD_SYSTEM_KERNEL_MODULES := \
     $(DEVICE_PATH)/prebuilts/modules/system_dlkm/6lowpan.ko \
     $(DEVICE_PATH)/prebuilts/modules/system_dlkm/8021q.ko \
     $(DEVICE_PATH)/prebuilts/modules/system_dlkm/aqc111.ko \
@@ -911,7 +916,7 @@ BOARD_SYSTEM_DLKM_KERNEL_MODULES := \
     $(DEVICE_PATH)/prebuilts/modules/system_dlkm/zsmalloc.ko
 
 # system_dlkm load order (from stock modules.load)
-BOARD_SYSTEM_DLKM_KERNEL_MODULES_LOAD := \
+BOARD_SYSTEM_KERNEL_MODULES_LOAD := \
     gzvm.ko \
     kheaders.ko \
     zsmalloc.ko \
