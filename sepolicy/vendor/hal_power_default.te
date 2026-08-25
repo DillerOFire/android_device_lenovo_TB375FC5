@@ -32,3 +32,9 @@ allow hal_power_default proc_tp:file rw_file_perms;
 # DO NOT use r_file_perms or add ioctl/lock — there is a global
 # `neverallow domain property_type (file (ioctl lock))`.
 allow hal_power_default vendor_mtk_powerhal_prop:file { read getattr map open };
+
+# Read the debug powerhint.json from /data/vendor/etc/ when
+# vendor.powerhal.config.debug=true (hotswap / live tuning path).
+# Without this the HAL aborts: avc denied { read } vendor_data_file.
+# Same file-permission set as the prop fix (no ioctl/lock).
+allow hal_power_default vendor_data_file:file { read getattr open map };

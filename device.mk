@@ -171,22 +171,45 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hardware.gatekeeper=beanpod \
     ro.hardware.kmsetkey=beanpod \
     ro.hardware.wechat=beanpod \
-    ro.vendor.mediatek.platform=MT6897 \
-    ro.surface_flinger.set_pen_timer_ms=10000
+    ro.vendor.mediatek.platform=MT6897
 
-# SurfaceFlinger refresh-rate switch timers, matching stock. Without these the
-# panel never leaves its peak rate when idle (config_defaultRefreshRate=144 ->
-# stuck at 144 -> battery drain); set_touch_timer_ms keeps the rate high through
-# a scroll. AOSP defaults predict_hwc_composition_strategy on, but stock disables
-# it (the prediction misbehaves on this MTK HWC), so match stock.
-PRODUCT_PROPERTY_OVERRIDES += \
+# AOSP SurfaceFlinger properties. Keep these on the system property partition:
+# SurfaceFlinger is a system process, and these are native AOSP readers. The
+# OEM-only vendor.debug.sf.cpupolicy/dynamic_duration namespace is deliberately
+# not carried over; AOSP has no reader for it.
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.surface_flinger.enable_frame_rate_override=false \
+    ro.surface_flinger.force_hwc_copy_for_virtual_displays=true \
+    ro.surface_flinger.game_default_frame_rate_override=120 \
+    ro.surface_flinger.has_wide_color_display=true \
+    ro.surface_flinger.max_frame_buffer_acquired_buffers=4 \
+    ro.surface_flinger.primary_display_orientation=ORIENTATION_270 \
+    ro.surface_flinger.protected_contents=true \
+    ro.surface_flinger.uclamp.min=120 \
     ro.surface_flinger.set_idle_timer_ms=2000 \
     ro.surface_flinger.set_touch_timer_ms=2000 \
-    ro.surface_flinger.set_launcher_timer_ms=30000 \
-    ro.surface_flinger.set_refresh_timer_ms=200 \
     ro.surface_flinger.display_update_imminent_timeout_ms=1000 \
+    debug.sf.disable_backpressure=1 \
+    debug.sf.early.app.duration=20000000 \
+    debug.sf.early.sf.duration=27600000 \
+    debug.sf.earlyGl.app.duration=20000000 \
+    debug.sf.earlyGl.sf.duration=27600000 \
+    debug.sf.enable_gl_backpressure=0 \
+    debug.sf.enable_hwc_vds=0 \
+    debug.sf.hwc.min.duration=2000000 \
+    debug.sf.ignore_hwc_physical_display_orientation=true \
+    debug.sf.late.app.duration=20000000 \
+    debug.sf.late.sf.duration=15600000 \
+    debug.sf.set_binder_thread_rt=1 \
+    debug.sf.use_phase_offsets_as_durations=1 \
     debug.sf.treat_170m_as_sRGB=1 \
     debug.sf.predict_hwc_composition_strategy=0
+
+# Runtime WorkDuration tuning (userdebug/root only):
+#   tools/tune_sf_workduration.sh <late_sf_ns> <early_sf_ns> <late_app_ns>
+# SurfaceFlinger reloads these three native values without a reboot. The
+# helper validates the range and applies the native propagation rules: early
+# SF/GL uses early.sf, while early/GL app uses late.app.
 
 # In AOSP A16, PRODUCT_PROPERTY_OVERRIDES and PRODUCT_VENDOR_PROPERTIES are
 # routed to /vendor/build.prop only. /system/build.prop comes from Soong's

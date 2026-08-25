@@ -1,6 +1,7 @@
 # Auto-generated from stock TB375FC PRC A16 vendor/build.prop. Properties
-# referenced by Mali libGLES (EGL config table), MTK HALs, surfaceflinger
-# phase offsets, Lenovo init triggers. build.prop content isn't a blob;
+# referenced by Mali libGLES (EGL config table), MTK HALs, and Lenovo init
+# triggers. AOSP SurfaceFlinger properties live in device.mk as system
+# properties; build.prop content isn't a blob;
 # extract-files doesn't replicate it. Without these libGLES_mali
 # eglInitialize aborts (no EGL configs advertised).
 #
@@ -11,10 +12,9 @@
 # Derived from the stock vendor/build.prop. Manual edits below are preserved.
 #   - ro.vendor.magt.mtk_magt_support=1 removed. device.mk sets =0. magt
 #     links android.hardware.thermal@2.0.so which AOSP A16 no longer ships.
-#   - ro.surface_flinger.primary_display_orientation=ORIENTATION_270: kept.
-#     The kernel touch driver is hard-wired to the 270 deg panel mount;
-#     overriding SF orientation without retuning touch transforms breaks
-#     input alignment.
+#   - SurfaceFlinger properties are not duplicated here. The native AOSP
+#     values, including primary_display_orientation, are declared in device.mk
+#     under PRODUCT_SYSTEM_PROPERTIES.
 #   - Telephony/radio props removed. Device is WiFi-only. Removed set:
 #       ro.telephony.default_network, ro.telephony.iwlan_operation_mode,
 #       ro.vendor.md_auto_setup_ims, ro.vendor.md_prop_ver,
@@ -83,19 +83,6 @@ PRODUCT_VENDOR_PROPERTIES += \
     debug.mediatek.disp_decompress=1 \
     debug.mtk_tflite.target_nnapi=29 \
     debug.renderengine.backend=skiagl \
-    debug.sf.disable_backpressure=1 \
-    debug.sf.early.app.duration=20000000 \
-    debug.sf.early.sf.duration=27600000 \
-    debug.sf.earlyGl.app.duration=20000000 \
-    debug.sf.earlyGl.sf.duration=27600000 \
-    debug.sf.enable_gl_backpressure=0 \
-    debug.sf.enable_hwc_vds=0 \
-    debug.sf.hwc.min.duration=2000000 \
-    debug.sf.ignore_hwc_physical_display_orientation=true \
-    debug.sf.late.app.duration=20000000 \
-    debug.sf.late.sf.duration=15600000 \
-    debug.sf.set_binder_thread_rt=1 \
-    debug.sf.use_phase_offsets_as_durations=1 \
     debug.stagefright.c2inputsurface=-1 \
     drm.service.enabled=true \
     external_storage.casefold.enabled=1 \
@@ -131,14 +118,6 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.oem_unlock_supported=1 \
     ro.opengles.version=196610 \
     ro.sf.lcd_density=340 \
-    ro.surface_flinger.enable_frame_rate_override=false \
-    ro.surface_flinger.force_hwc_copy_for_virtual_displays=true \
-    ro.surface_flinger.game_default_frame_rate_override=120 \
-    ro.surface_flinger.has_wide_color_display=true \
-    ro.surface_flinger.max_frame_buffer_acquired_buffers=4 \
-    ro.surface_flinger.primary_display_orientation=ORIENTATION_270 \
-    ro.surface_flinger.protected_contents=true \
-    ro.surface_flinger.uclamp.min=120 \
     ro.vendor.afbc.enable=3 \
     ro.vendor.ap_info_monitor=0 \
     ro.vendor.arm.egl.configs.nv12.hal_format=0x200 \
@@ -317,57 +296,6 @@ PRODUCT_VENDOR_PROPERTIES += \
     vendor.camera.mdp.cz.enable=1 \
     vendor.camera.mdp.dre.enable=1 \
     vendor.connsys.driver.ready=no \
-    vendor.debug.sf.cpupolicy.base_min_bl=314 \
-    vendor.debug.sf.cpupolicy.foreground=1 \
-    vendor.debug.sf.cpupolicy.hw_comp_suspend=1 \
-    vendor.debug.sf.cpupolicy.lowbound_uclamp_min=113 \
-    vendor.debug.sf.cpupolicy.max_correct_offset=290 \
-    vendor.debug.sf.cpupolicy.min_120=88 \
-    vendor.debug.sf.cpupolicy.min_144=113 \
-    vendor.debug.sf.cpupolicy.min_30_mml=88 \
-    vendor.debug.sf.cpupolicy.min_60=88 \
-    vendor.debug.sf.cpupolicy.min_60_mml=88 \
-    vendor.debug.sf.cpupolicy.min_90=88 \
-    vendor.debug.sf.cpupolicy.min_boost=122 \
-    vendor.debug.sf.cpupolicy.power_down_120=600000 \
-    vendor.debug.sf.cpupolicy.power_up_120=-600000 \
-    vendor.debug.sf.cpupolicy.re_hfr=1 \
-    vendor.debug.sf.cpupolicy.rt_bl_min=190 \
-    vendor.debug.sf.cpupolicy.sf_cpu_thres=160 \
-    vendor.debug.sf.cpupolicy.sus_correct_max=25 \
-    vendor.debug.sf.cpupolicy.sus_correct_min=-15 \
-    vendor.debug.sf.cpupolicy.upbound_uclamp_max_ll=156 \
-    vendor.debug.sf.cpupolicy.upbound_uclamp_min=496 \
-    vendor.debug.sf.cpupolicy.upbound_uclamp_ret_sys=152 \
-    vendor.debug.sf.cpupolicy.xgf_min=25 \
-    vendor.debug.sf.dynamic_duration.app.decouple=20000000 \
-    vendor.debug.sf.dynamic_duration.app.early.120=11600000 \
-    vendor.debug.sf.dynamic_duration.app.early.60=16600000 \
-    vendor.debug.sf.dynamic_duration.app.early.90=14600000 \
-    vendor.debug.sf.dynamic_duration.app.early=18000000 \
-    vendor.debug.sf.dynamic_duration.app.earlyGl.120=11600000 \
-    vendor.debug.sf.dynamic_duration.app.earlyGl.60=16600000 \
-    vendor.debug.sf.dynamic_duration.app.earlyGl.90=14600000 \
-    vendor.debug.sf.dynamic_duration.app.earlyGl=18000000 \
-    vendor.debug.sf.dynamic_duration.app.late.120=11600000 \
-    vendor.debug.sf.dynamic_duration.app.late.60=16600000 \
-    vendor.debug.sf.dynamic_duration.app.late.90=14600000 \
-    vendor.debug.sf.dynamic_duration.app.late=18000000 \
-    vendor.debug.sf.dynamic_duration.sf.decouple=27600000 \
-    vendor.debug.sf.dynamic_duration.sf.early.120=12300000 \
-    vendor.debug.sf.dynamic_duration.sf.early.60=15600000 \
-    vendor.debug.sf.dynamic_duration.sf.early.90=13100000 \
-    vendor.debug.sf.dynamic_duration.sf.early=14600000 \
-    vendor.debug.sf.dynamic_duration.sf.earlyGl.120=12300000 \
-    vendor.debug.sf.dynamic_duration.sf.earlyGl.60=15600000 \
-    vendor.debug.sf.dynamic_duration.sf.earlyGl.90=13100000 \
-    vendor.debug.sf.dynamic_duration.sf.earlyGl=14600000 \
-    vendor.debug.sf.dynamic_duration.sf.late.120=12300000 \
-    vendor.debug.sf.dynamic_duration.sf.late.60=15600000 \
-    vendor.debug.sf.dynamic_duration.sf.late.90=13100000 \
-    vendor.debug.sf.dynamic_duration.sf.late=14600000 \
-    vendor.debug.sf.dynamic_duration.switch=1 \
-    vendor.debug.sf.fbthint=1 \
     vendor.mbrain.build.version= \
     vendor.mtk.camera.app.fd.video=1 \
     vendor.mtk.vdec.decode.error.handle.mode=1 \
