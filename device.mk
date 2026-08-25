@@ -11,7 +11,10 @@ DEVICE_PATH := device/lenovo/TB375FC
 # mediatek-common to PRODUCT_BOOT_JARS), compat.mk (telephony-common-stub
 # LineageOS compat shim). The Soong namespace addition lets platform-bootclasspath
 # resolve mediatek-common.
-PRODUCT_SOONG_NAMESPACES += hardware/mediatek
+PRODUCT_SOONG_NAMESPACES += \
+    hardware/google/pixel \
+    hardware/lineage/interfaces/power-libperfmgr \
+    hardware/mediatek
 
 # Stock Lenovo prebuilt android.hardware.thermal-service.mediatek links
 # pixel-power-ext-V1-ndk.so + pixelatoms-cpp.so (device-tree prebuilt libs at
@@ -321,14 +324,26 @@ PRODUCT_PACKAGES += \
     fs_config_dirs \
     fs_config_files
 
-# Tap-to-wake bridge: Settings.Secure.DOUBLE_TAP_TO_WAKE -> /proc/gesture_control.
-# mtkpower ignores Mode.DOUBLE_TAP_TO_WAKE AIDL, so we bridge it ourselves.
-PRODUCT_PACKAGES += \
-    TapToWakeService
-
+# Tap-to-wake: Mode.DOUBLE_TAP_TO_WAKE is now handled in the power HAL's
+# mode extension lib (power/power-mode.cpp -> /proc/gesture_control).
+# The old Settings.Secure observer app bridge is retired.
 # RRO turning on config_supportDoubleTapWake so AOSP Settings -> Display
 # surfaces the toggle.
 DEVICE_PACKAGE_OVERLAYS += device/lenovo/TB375FC/overlay
+
+# Lineage power HAL (libperfmgr) replaces the stock MTK AIDL power HAL.
+# - mode_extension_lib wires our DT2W handler into PowerExt (see above).
+# - MTK perf client libs stay as prebuilt blobs (use_prebuilt_perf=true
+#   below keeps hardware/mediatek from rebuilding them); the lineage HAL
+#   does not link them, but other vendor blobs dlopen them at runtime.
+$(call soong_config_set,power_libperfmgr,mode_extension_lib, //$(DEVICE_PATH):libperfmgr-ext-lenovo)
+
+PRODUCT_PACKAGES += \
+    android.hardware.power-service.lineage-libperfmgr \
+    libperfmgr
+
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
 # Locale-to-timezone first-boot mapping (Setup Wizard picks region -> we set TZ).
 PRODUCT_COPY_FILES += \

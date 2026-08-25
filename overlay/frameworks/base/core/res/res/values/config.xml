@@ -6,8 +6,8 @@
 <resources>
     <!--
         Surfaces Settings -> Display -> Tap to wake. The toggle writes
-        Settings.Secure.DOUBLE_TAP_TO_WAKE; TapToWakeService observes that
-        and mirrors to /proc/gesture_control.
+        Settings.Secure.DOUBLE_TAP_TO_WAKE; PowerManagerService forwards it to
+        the power HAL, whose mode extension mirrors it to /proc/gesture_control.
     -->
     <bool name="config_supportDoubleTapWake">true</bool>
 

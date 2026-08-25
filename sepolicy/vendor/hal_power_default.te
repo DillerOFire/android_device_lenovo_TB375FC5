@@ -1,0 +1,34 @@
+# TB375FC: lineage-libperfmgr power HAL (hal_power_default domain)
+#
+# powerhint.json nodes:
+#  - sysfs_ged: /sys/kernel/ged/hal/{custom_boost_gpu_freq,timer_base_dvfs_margin,loading_base_dvfs_step}
+#  - cpufreq scaling_{min,max}_freq (policy0/4/7): AOSP genfs_contexts labels
+#    /sys/devices/system/cpu as sysfs_devices_system_cpu (prefix match).
+#  - dvfsrc devfreq userspace set_freq -> sysfs_dvfsrc_devfreq
+#  - /dev/cpuctl/top-app/cpu.uclamp.min -> cgroup ctl node (default label)
+
+allow hal_power_default sysfs_ged:dir r_dir_perms;
+allow hal_power_default sysfs_ged:file rw_file_perms;
+
+allow hal_power_default sysfs_dvfsrc_devfreq:dir search;
+allow hal_power_default sysfs_dvfsrc_devfreq:file rw_file_perms;
+
+allow hal_power_default sysfs_devices_system_cpu:file rw_file_perms;
+
+# UclampTAMin node -> /dev/cpuctl/top-app/cpu.uclamp.min (cgroup type,
+# under the device's generic cgroup label; write via top-app open)
+allow hal_power_default cgroup:dir r_dir_perms;
+allow hal_power_default cgroup:file rw_file_perms;
+
+# Mode.DOUBLE_TAP_TO_WAKE extension writes /proc/gesture_control (proc_tp)
+allow hal_power_default proc_tp:file rw_file_perms;
+
+# Reads vendor.powerhal.* / persist.vendor.powerhal.* props (labeled
+# vendor_mtk_powerhal_prop) at startup to apply MTK powerhal tuning defaults.
+# In this Android 16 policy, property READ is granted via the `file` class
+# (property_service only defines `set`). Mirror the stock mtk_hal_power set
+# exactly (sepolicy/vendor_mtk_prebuilt/mtk_proprietary.te:8931):
+#   { read getattr map open }
+# DO NOT use r_file_perms or add ioctl/lock — there is a global
+# `neverallow domain property_type (file (ioctl lock))`.
+allow hal_power_default vendor_mtk_powerhal_prop:file { read getattr map open };
