@@ -177,10 +177,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # SurfaceFlinger is a system process, and these are native AOSP readers. The
 # OEM-only vendor.debug.sf.cpupolicy/dynamic_duration namespace is deliberately
 # not carried over; AOSP has no reader for it.
+# Recovery defaults to unauthenticated ADB only; adbd consults this property
+# exclusively in recovery. Normal Android remains governed by ro.adb.secure=1.
 PRODUCT_SYSTEM_PROPERTIES += \
+    ro.adb.secure.recovery=0 \
     ro.surface_flinger.enable_frame_rate_override=false \
     ro.surface_flinger.force_hwc_copy_for_virtual_displays=true \
-    ro.surface_flinger.game_default_frame_rate_override=120 \
     ro.surface_flinger.has_wide_color_display=true \
     ro.surface_flinger.max_frame_buffer_acquired_buffers=4 \
     ro.surface_flinger.primary_display_orientation=ORIENTATION_270 \
