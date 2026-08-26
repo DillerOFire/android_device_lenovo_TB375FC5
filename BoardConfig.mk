@@ -25,14 +25,17 @@ TARGET_ARCH_VARIANT        := armv8-a
 TARGET_CPU_ABI             := arm64-v8a
 TARGET_CPU_ABI2            :=
 TARGET_CPU_VARIANT         := generic
-TARGET_CPU_VARIANT_RUNTIME := cortex-a715
+# ART in this branch supports up to cortex-a76; the stock vendor also uses a
+# conservative cortex-a55 runtime variant.  A715 makes dex2oat reject every
+# post-OTA dexopt request, so use the stock, ART-supported value.
+TARGET_CPU_VARIANT_RUNTIME := cortex-a55
 
 TARGET_2ND_ARCH            := arm
 TARGET_2ND_ARCH_VARIANT    := armv8-2a
 TARGET_2ND_CPU_ABI         := armeabi-v7a
 TARGET_2ND_CPU_ABI2        := armeabi
 TARGET_2ND_CPU_VARIANT     := generic
-TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a715
+TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 
 # Bootloader / SoC
 TARGET_BOARD_PLATFORM           := mt6897
@@ -286,6 +289,8 @@ BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.recovery
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_DENSITY := xhdpi
+# Device recovery UI extension: adds a "Mount metadata" Advanced-menu action.
+TARGET_RECOVERY_UI_LIB := librecovery_ui_tb375fc
 # 12.7" tablet at 2944x1840; chunky touch targets compensate for recovery's
 # minimal UI scaling.
 TARGET_RECOVERY_UI_MARGIN_HEIGHT := 100
