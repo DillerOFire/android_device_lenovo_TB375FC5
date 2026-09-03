@@ -4,9 +4,14 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-
 # AOSP base inheritance. core_64_bit + full_base MUST come before vendor/device
 # makefiles, otherwise you end up with a 256 MB system image of 16 binaries.
+#
+# Stock last-wins ro.zygote=zygote64. Keep TARGET_2ND_ARCH for 32-bit vendor
+# HALs, but do not start zygote32: ZUI ships no /vendor/lib/egl/libMEOW_data.so,
+# and 32-bit libGLES_meow SIGSEGVs on DDKHook fail (bootloop). 64-bit MEOW
+# loads mali + libMEOW_data.so and is the actual GPU wrapper.
+ZYGOTE_FORCE_64 := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 # WiFi-only tablet: full_base.mk (generic_no_telephony) instead of
 # full_base_telephony.mk. The telephony variant unconditionally adds Dialer +
