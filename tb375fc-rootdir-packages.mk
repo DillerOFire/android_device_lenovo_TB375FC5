@@ -100,3 +100,4 @@ PRODUCT_COPY_FILES += \
     device/lenovo/TB375FC/rootdir/etc/init/vndservicemanager.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/vndservicemanager.rc \
     device/lenovo/TB375FC/rootdir/etc/init/wlan_assistant.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/wlan_assistant.rc \
     device/lenovo/TB375FC/rootdir/etc/init/init.tb375fc-lenovocust.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.tb375fc-lenovocust.rc \
+    device/lenovo/TB375FC/rootdir/etc/init/loggy.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/loggy.rc

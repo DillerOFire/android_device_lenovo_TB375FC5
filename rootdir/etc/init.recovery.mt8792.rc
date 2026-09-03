@@ -1,5 +1,21 @@
-# tb375fc recovery USB configfs setup.
-#
+on early-init
+    # Debug recovery mount/policy failures on the user target.
+    exec -- /system/bin/toybox setenforce 0
+
+on boot
+    # Keep metadata readable from non-root recovery ADB.
+    chmod 0755 /metadata
+    chmod 0644 /metadata/boot_log_full.txt
+    chmod 0644 /metadata/boot_log_crash.txt
+    chmod 0644 /metadata/boot_log_kernel.txt
+    chmod 0644 /metadata/boot_log_avc.txt
+
+    # Allow non-root recovery ADB to inspect previous crash logs.
+    chmod 0755 /sys/fs/pstore
+    chmod 0444 /sys/fs/pstore/console-ramoops
+    chmod 0444 /sys/fs/pstore/console-ramoops-0
+    chmod 0444 /sys/fs/pstore/pmsg-ramoops-0
+
 # Default LOS recovery init.rc (bootable/recovery/etc/init.rc) sets
 # sys.usb.configfs=0 in on early-init, routing USB gadget setup down the
 # legacy /sys/class/android_usb API. A14+ MTK kernels (GKI 6.1) only expose

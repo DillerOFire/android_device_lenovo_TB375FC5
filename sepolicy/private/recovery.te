@@ -5,6 +5,28 @@
 # is non-fatal, but it is a real enforcing denial. Mirrors the existing AOSP
 # r_dir_file(recovery, sysfs_fs_ext4_features).
 recovery_only(`
+    # Debug recovery: allow metadata mounting/log access on user builds.
+    permissive recovery;
+
+    # Permit non-root recovery ADB to inspect metadata boot logs.
+    # Files are tb375fc_boot_log_file, not metadata_file — allow both.
+    allow shell metadata_file:dir r_dir_perms;
+    allow shell metadata_file:file r_file_perms;
+    allow shell tb375fc_boot_log_file:file r_file_perms;
+
+    # adb pull runs as adbd, not shell — without this, pull is denied even
+    # though cat via shell works.
+    allow adbd metadata_file:dir r_dir_perms;
+    allow adbd tb375fc_boot_log_file:file r_file_perms;
+
+    # Permit non-root recovery ADB to read crash records from pstore.
+    allow shell pstorefs:dir r_dir_perms;
+    allow shell pstorefs:file r_file_perms;
+
+    # Permit non-root recovery ADB to pull /tmp/recovery.log.
+    allow shell tmpfs:dir search;
+    allow shell tmpfs:file { getattr open read map };
+
     r_dir_file(recovery, sysfs_fs_f2fs)
 
     # mkfs.f2fs reads /proc/version for the kernel version string while

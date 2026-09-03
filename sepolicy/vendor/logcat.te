@@ -1,0 +1,35 @@
+# Dedicated early-boot logger domain. The platform logpersist domain is
+# intentionally prohibited from writing files, including custom file types, so
+# we use our own coredomain (mirroring logpersist.coredomain placement).
+type tb375fc_bootlog, domain, coredomain;
+type tb375fc_boot_log_file, file_type;
+
+# Let init exec logcat and transition into this domain. Being coredomain lets it
+# use a system binary (logcat_exec) as entrypoint; domain_auto_trans grants init
+# getattr/open/read/execute/map on the binary and the exec transition.
+domain_auto_trans(init, logcat_exec, tb375fc_bootlog);
+
+allow tb375fc_bootlog metadata_file:dir {
+    getattr
+    open
+    read
+    search
+    write
+    add_name
+    remove_name
+};
+# Files created in /metadata take the dedicated label so this domain may write them.
+type_transition tb375fc_bootlog metadata_file:file tb375fc_boot_log_file;
+allow tb375fc_bootlog tb375fc_boot_log_file:file {
+    create
+    getattr
+    open
+    write
+    append
+    setattr
+};
+
+# logcat needs logd access or no files are ever written (empty /metadata).
+control_logd(tb375fc_bootlog)
+unix_socket_connect(tb375fc_bootlog, logdr, logd)
+get_prop(tb375fc_bootlog, logd_prop)
