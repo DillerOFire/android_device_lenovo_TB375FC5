@@ -3,12 +3,11 @@
 # actual vendor/lenovo/TB375FC/proprietary/ tree. Every entry corresponds
 # to a real file on disk; the build will not fail on a missing source.
 
-odm/etc/vintf/manifest.xml;MAKE_COPY_RULE_ONLY
 odm/etc/vintf/manifest_dsds.xml;MAKE_COPY_RULE_ONLY
 odm/etc/vintf/manifest_qsqs.xml;MAKE_COPY_RULE_ONLY
 odm/etc/vintf/manifest_ss.xml;MAKE_COPY_RULE_ONLY
 odm/etc/vintf/manifest_tsts.xml;MAKE_COPY_RULE_ONLY
-product/etc/NOTICE.xml.gz
+
 product/etc/init/init.motodestktop.rc
 product/etc/permissions/product-permissions-mediatek.xml
 product/etc/security/fsverity/play_store_fsi_cert.der
@@ -34,13 +33,11 @@ product/media/audio/ui/VideoRecord.ogg
 product/media/audio/ui/VideoStop.ogg
 product/media/audio/ui/camera_click.ogg
 product/media/audio/ui/camera_focus.ogg
-product/media/audio/ui/pen_mono.wav
-product/media/audio/ui/pen_sound.ogg
 system_ext/apex/com.android.compos.apex
 system_ext/apex/com.android.vndk.v31.apex
 system_ext/apex/com.android.vndk.v33.apex
 system_ext/apex/com.android.vndk.v34.apex
-system_ext/app/DolbyVisionService/DolbyVisionService.apk
+system/system/app/DolbyVisionService/DolbyVisionService.apk:system/app/DolbyVisionService/DolbyVisionService.apk
 system_ext/app/MiraVision/MiraVision.apk
 system_ext/bin/AudioSetParam
 system_ext/bin/aee_aed64
@@ -67,15 +64,12 @@ system_ext/bin/rtt_v2
 system_ext/bin/thermald
 system_ext/bin/trace
 system_ext/bin/vtservice
-system_ext/etc/NOTICE.xml.gz
+
 system_ext/etc/OVSplitscreen/OVRelaunchBlacklist.xml
 system_ext/etc/OVSplitscreen/OVSplitBlacklist.xml
 system_ext/etc/a2dp_audio_policy_configuration.xml
 system_ext/etc/a2dp_in_audio_policy_configuration.xml
-system_ext/etc/aconfig/flag.info
-system_ext/etc/aconfig/flag.map
-system_ext/etc/aconfig/flag.val
-system_ext/etc/aconfig/package.map
+
 system_ext/etc/aee-commit
 system_ext/etc/aee-config
 system_ext/etc/audio_policy_configuration.xml
@@ -119,9 +113,7 @@ system_ext/etc/permissions/appfunctions.extension.xml
 system_ext/etc/permissions/com.android.carrierconfig.xml
 system_ext/etc/permissions/com.android.emergency.xml
 system_ext/etc/permissions/com.android.extensions.appfunctions.xml
-system_ext/etc/permissions/com.android.systemui.xml
 system_ext/etc/permissions/com.dolby.daxservice.xml
-system_ext/etc/permissions/privapp-permissions-com.android.systemui.xml
 system_ext/etc/permissions/system-ext-permissions-mediatek.xml
 system_ext/etc/r_submix_audio_policy_configuration.xml
 system_ext/etc/spn-conf.xml
@@ -333,7 +325,6 @@ system_ext/lib64/libvow_comp_train.so
 system_ext/lib64/libvsim-adaptor-client.so
 system_ext/lib64/libvsync_hint.so
 system_ext/lib64/libvt_avsync.so
-system_ext/lib64/vendor.mediatek.framework.mtksf_ext-V3-ndk.so
 system_ext/lib64/vendor.mediatek.framework.mtksf_ext-V4-ndk.so
 system_ext/lib64/vendor.mediatek.framework.mtksf_ext-V9-ndk.so
 system_ext/lib64/vendor.mediatek.hardware.aee-V1-ndk.so
@@ -533,7 +524,7 @@ vendor/bin/hw/tetheroffloadservice
 vendor/bin/hw/vendor.dolby.hardware.dms@2.0-service
 vendor/bin/hw/vendor.dolby.media.c2-default-service-dax
 vendor/bin/hw/vendor.dolby.media.c2-service-vision
-vendor/bin/hw/vendor.dolby.media.c2@1.0-service
+vendor/bin/hw/vendor.dolby.media.c2-default-service-dax:vendor/bin/hw/vendor.dolby.media.c2@1.0-service
 vendor/bin/hw/vendor.lenovo.hardware.battery-service
 vendor/bin/hw/vendor.lenovo.hardware.display-service
 vendor/bin/hw/vendor.lenovo.hardware.factory-service
@@ -605,7 +596,7 @@ vendor/etc/AudioDump_dynamic.xml
 vendor/etc/AudioLog_dynamic.xml
 vendor/etc/MBrain_dynamic.xml
 vendor/etc/MNL_Config.xml
-vendor/etc/NOTICE.xml.gz
+
 vendor/etc/a2dp_audio_policy_configuration.xml
 vendor/etc/a2dp_in_audio_policy_configuration.xml
 vendor/etc/apdb/APDB_MT6897___W2439
@@ -1214,6 +1205,7 @@ vendor/lib/egl/libGLES_meow.so
 vendor/lib/egl/libMEOW_qt.so
 vendor/lib/egl/libMEOW_trace.so
 vendor/lib/egl/mt6897/libGLES_mali.so;MAKE_COPY_RULE_ONLY
+vendor/lib/egl/libGLES_mali.so
 vendor/lib/framework-permission-aidl-cpp.so;MAKE_COPY_RULE_ONLY
 vendor/lib/hw/android.hardware.audio.effect@6.0-impl.so
 vendor/lib/hw/android.hardware.audio.effect@7.0-impl.so
@@ -1788,6 +1780,7 @@ vendor/lib64/egl/libMEOW_data.so
 vendor/lib64/egl/libMEOW_qt.so
 vendor/lib64/egl/libMEOW_trace.so
 vendor/lib64/egl/mt6897/libGLES_mali.so;MAKE_COPY_RULE_ONLY
+vendor/lib64/egl/libGLES_mali.so
 vendor/lib64/framework-permission-aidl-cpp.so;MAKE_COPY_RULE_ONLY
 vendor/lib64/hw/Sarsensors.default.so
 vendor/lib64/hw/android.hardware.audio.effect@6.0-impl.so
@@ -2605,7 +2598,6 @@ vendor/lib64/soundfx/libspatializer.so
 vendor/lib64/soundfx/libswdap.so
 vendor/lib64/soundfx/libswgamedap.so
 vendor/lib64/soundfx/libvisualizer.so
-vendor/lib64/vendor.dolby.dvs-V1-ndk.so
 vendor/lib64/vendor.dolby.hardware.dms@2.0.so
 vendor/lib64/vendor.lenovo.hardware.battery-V3-ndk.so
 vendor/lib64/vendor.lenovo.hardware.display-V1-ndk.so

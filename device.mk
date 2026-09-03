@@ -346,6 +346,7 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-impl.recovery \
     bootctrl.default \
     bootctrl.default.recovery \
+    privapp_whitelist_com.android.systemui \
     fs_config_dirs \
     fs_config_files
 
