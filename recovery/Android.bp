@@ -1,6 +1,6 @@
 // Device recovery extension for Lenovo TB375FC.
-// Provides make_device() + a Device subclass that adds a "Mount metadata"
-// action to the Advanced recovery menu.
+// Provides make_device() + a Device subclass that adds a metadata mount toggle
+// to the Advanced recovery menu.
 
 package {
     default_applicable_licenses: ["Android-Apache-2.0"],

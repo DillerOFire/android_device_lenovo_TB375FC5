@@ -1,13 +1,13 @@
 /*
  * Device recovery extension for Lenovo TB375FC.
  *
- * Adds a "Mount metadata" action to the Advanced menu so diagnostic boot logs
+ * Adds a metadata mount toggle to the Advanced menu so diagnostic boot logs
  * written to /metadata (see vendor/etc/init/loggy.rc) can be inspected after
- * a boot failure, without needing root ADB in recovery. The metadata partition
- * is not mounted by default in this recovery; the button mounts it explicitly.
+ * a boot failure, without needing root ADB in recovery.
  */
 
 #include <errno.h>
+#include <mntent.h>
 #include <stdlib.h>
 #include <sys/mount.h>
 #include <sys/stat.h>
@@ -29,6 +29,23 @@ bool IsAdvancedMenu(::Device* device) {
     return headers.size() == 1 && headers[0] == "Advanced";
 }
 
+bool IsMetadataMounted() {
+    FILE* mounts = setmntent("/proc/mounts", "r");
+    if (mounts == nullptr) {
+        return false;
+    }
+
+    bool mounted = false;
+    while (const mntent* entry = getmntent(mounts)) {
+        if (strcmp(entry->mnt_dir, kMetadataTarget) == 0) {
+            mounted = true;
+            break;
+        }
+    }
+    endmntent(mounts);
+    return mounted;
+}
+
 }  // namespace
 
 class TB375FCDevice : public ::Device {
@@ -39,7 +56,7 @@ class TB375FCDevice : public ::Device {
         const auto& base_items = ::Device::GetMenuItems();
         menu_items_.assign(base_items.begin(), base_items.end());
         if (IsAdvancedMenu(this)) {
-            menu_items_.push_back("Mount metadata");
+            menu_items_.push_back(IsMetadataMounted() ? "Unmount metadata" : "Mount metadata");
         }
         return menu_items_;
     }
@@ -48,7 +65,7 @@ class TB375FCDevice : public ::Device {
         if (IsAdvancedMenu(this)) {
             // The custom entry is the one appended after the base Advanced items.
             if (menu_position >= ::Device::GetMenuItems().size()) {
-                MountMetadata();
+                ToggleMetadataMount();
                 return ::Device::NO_ACTION;
             }
         }
@@ -56,6 +73,21 @@ class TB375FCDevice : public ::Device {
     }
 
   private:
+    void ToggleMetadataMount() {
+        if (!IsMetadataMounted()) {
+            MountMetadata();
+            return;
+        }
+
+        ::RecoveryUI* ui = GetUI();
+        ui->Print("Unmounting /metadata ...\n");
+        if (umount(kMetadataTarget) != 0) {
+            ui->Print("Failed to unmount /metadata: %s\n", strerror(errno));
+            return;
+        }
+        ui->Print("Unmounted /metadata.\n");
+    }
+
     void MountMetadata() {
         ::RecoveryUI* ui = GetUI();
         ui->Print("Mounting /metadata ...\n");
