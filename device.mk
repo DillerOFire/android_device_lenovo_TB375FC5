@@ -186,6 +186,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # (2026-09-04): 6/6 accepted. ON won every block (352/335/355 vs OFF
 # 407/392/576). Unpaired 95% CIs overlap because OFF variance is huge;
 # operator pin.
+# AOSPperfQA schema-2 SF matrix, 2026-09-04: retained measured control.
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.adb.secure.recovery=0 \
     ro.surface_flinger.enable_frame_rate_override=false \
@@ -199,16 +200,16 @@ PRODUCT_SYSTEM_PROPERTIES += \
     ro.surface_flinger.set_touch_timer_ms=2000 \
     ro.surface_flinger.display_update_imminent_timeout_ms=1000 \
     debug.sf.disable_backpressure=1 \
-    debug.sf.early.app.duration=20000000 \
-    debug.sf.early.sf.duration=27600000 \
-    debug.sf.earlyGl.app.duration=20000000 \
-    debug.sf.earlyGl.sf.duration=27600000 \
+    debug.sf.early.app.duration=11600000 \
+    debug.sf.early.sf.duration=14500000 \
+    debug.sf.earlyGl.app.duration=11600000 \
+    debug.sf.earlyGl.sf.duration=14500000 \
     debug.sf.enable_gl_backpressure=0 \
     debug.sf.enable_hwc_vds=0 \
     debug.sf.hwc.min.duration=2000000 \
     debug.sf.ignore_hwc_physical_display_orientation=true \
-    debug.sf.late.app.duration=20000000 \
-    debug.sf.late.sf.duration=15600000 \
+    debug.sf.late.app.duration=11600000 \
+    debug.sf.late.sf.duration=12300000 \
     debug.sf.set_binder_thread_rt=1 \
     debug.sf.use_phase_offsets_as_durations=1 \
     debug.sf.treat_170m_as_sRGB=1 \
