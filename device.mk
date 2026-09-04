@@ -179,6 +179,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # not carried over; AOSP has no reader for it.
 # Recovery defaults to unauthenticated ADB only; adbd consults this property
 # exclusively in recovery. Normal Android remains governed by ro.adb.secure=1.
+# Runtime WorkDuration (userdebug/root): tools/tune_sf_workduration.sh
+# <late_sf_ns> <early_sf_ns> <late_app_ns>. SF reloads those three native
+# values without a reboot. early SF/GL uses early.sf; early/GL app uses late.app.
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.adb.secure.recovery=0 \
     ro.surface_flinger.enable_frame_rate_override=false \
@@ -207,11 +210,13 @@ PRODUCT_SYSTEM_PROPERTIES += \
     debug.sf.treat_170m_as_sRGB=1 \
     debug.sf.predict_hwc_composition_strategy=0
 
-# Runtime WorkDuration tuning (userdebug/root only):
-#   tools/tune_sf_workduration.sh <late_sf_ns> <early_sf_ns> <late_app_ns>
-# SurfaceFlinger reloads these three native values without a reboot. The
-# helper validates the range and applies the native propagation rules: early
-# SF/GL uses early.sf, while early/GL app uses late.app.
+# App HWUI Skia pipeline (not SurfaceFlinger RenderEngine).
+# debug.hwui.renderer is read by libhwui; restart the app, not SF.
+# TB375FC hwuimacro offscreen 2026-09-04: skiavk beat skiagl on listview
+# (-51%), shadowgrid2 (-47%), recents, roundRectClipping-gpu; windowblurkawase
+# +4%.
+PRODUCT_SYSTEM_PROPERTIES += \
+    debug.hwui.renderer=skiavk
 
 # In AOSP A16, PRODUCT_PROPERTY_OVERRIDES and PRODUCT_VENDOR_PROPERTIES are
 # routed to /vendor/build.prop only. /system/build.prop comes from Soong's

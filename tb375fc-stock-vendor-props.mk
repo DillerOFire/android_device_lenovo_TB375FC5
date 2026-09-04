@@ -47,6 +47,14 @@
 #     stack (the offload session ends immediately), so forcing offload OFF
 #     (=true, or the dev-setting toggle) is what makes the software datapath
 #     actually play audio. Do NOT flip this to false — verified silent.
+#   - debug.renderengine.backend=skiaglthreaded (stock was skiagl).
+#     AOSPperfQA campaign 10 (2026-09-04): 6/6 accepted, score lower-better
+#     5*jank%+2*p99ms. skiagl mean 602.6 (599.9/605.6/602.2);
+#     skiaglthreaded mean 431.8 (565.7/370.7/359.1). 95% CIs overlap,
+#     decision inconclusive. Not a real non-threaded vs threaded
+#     architecture (LOS 23.2 still wraps both). Operator request.
+#     Do not also set this in device.mk — A16 generate-common-build-props
+#     rejects duplicate sysprop assignments.
 
 PRODUCT_VENDOR_PROPERTIES += \
     aaudio.mmap_exclusive_policy=2 \
@@ -82,7 +90,7 @@ PRODUCT_VENDOR_PROPERTIES += \
     debug.mediatek.appgamepq_compress=1 \
     debug.mediatek.disp_decompress=1 \
     debug.mtk_tflite.target_nnapi=29 \
-    debug.renderengine.backend=skiagl \
+    debug.renderengine.backend=skiaglthreaded \
     debug.stagefright.c2inputsurface=-1 \
     drm.service.enabled=true \
     external_storage.casefold.enabled=1 \
