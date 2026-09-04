@@ -182,6 +182,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Runtime WorkDuration (userdebug/root): tools/tune_sf_workduration.sh
 # <late_sf_ns> <early_sf_ns> <late_app_ns>. SF reloads those three native
 # values without a reboot. early SF/GL uses early.sf; early/GL app uses late.app.
+# debug.sf.predict_hwc_composition_strategy=1. AOSPperfQA hwc-predict-02
+# (2026-09-04): 6/6 accepted. ON won every block (352/335/355 vs OFF
+# 407/392/576). Unpaired 95% CIs overlap because OFF variance is huge;
+# operator pin.
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.adb.secure.recovery=0 \
     ro.surface_flinger.enable_frame_rate_override=false \
@@ -208,7 +212,7 @@ PRODUCT_SYSTEM_PROPERTIES += \
     debug.sf.set_binder_thread_rt=1 \
     debug.sf.use_phase_offsets_as_durations=1 \
     debug.sf.treat_170m_as_sRGB=1 \
-    debug.sf.predict_hwc_composition_strategy=0
+    debug.sf.predict_hwc_composition_strategy=1
 
 # App HWUI Skia pipeline (not SurfaceFlinger RenderEngine).
 # debug.hwui.renderer is read by libhwui; restart the app, not SF.
