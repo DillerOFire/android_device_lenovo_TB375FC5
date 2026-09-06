@@ -51,7 +51,6 @@ system_ext/bin/boot_logo_updater
 system_ext/bin/fsck.ntfs;MAKE_COPY_RULE_ONLY
 system_ext/bin/hw/android.hardware.audio.parameter_parser.service;MAKE_COPY_RULE_ONLY
 system_ext/bin/hw/android.hidl.allocator@1.0-service
-system_ext/bin/hwservicemanager
 system_ext/bin/kpoc_charger
 system_ext/bin/loghidlsysservice
 system_ext/bin/magt
@@ -94,7 +93,6 @@ system_ext/etc/init/bootlogoupdater.rc
 system_ext/etc/init/hw/init.aee.rc
 system_ext/etc/init/hw/meta_init.system.rc
 system_ext/etc/init/hw/vendor_init_as_system.rc
-system_ext/etc/init/hwservicemanager.rc
 system_ext/etc/init/init.thermald.rc
 system_ext/etc/init/init.vtservice.rc
 system_ext/etc/init/kpoc_charger.rc
