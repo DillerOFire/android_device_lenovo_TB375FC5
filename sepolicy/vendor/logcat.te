@@ -4,10 +4,15 @@
 type tb375fc_bootlog, domain, coredomain;
 type tb375fc_boot_log_file, file_type;
 
-# Let init exec logcat and transition into this domain. Being coredomain lets it
-# use a system binary (logcat_exec) as entrypoint; domain_auto_trans grants init
-# getattr/open/read/execute/map on the binary and the exec transition.
-domain_auto_trans(init, logcat_exec, tb375fc_bootlog);
+# Do NOT domain_auto_trans(init, logcat_exec, ...): platform init.te already has
+# domain_auto_trans(init, logcat_exec, logpersist). Two type_transition results
+# for the same key fail binary policy creation on PixelOS A17 (works to compile
+# on some trees until the vendor CIL merge is strict).
+#
+# loggy.rc sets seclabel u:r:tb375fc_bootlog:s0 on each service — that is an
+# explicit setexeccon path. domain_trans allows the transition without adding
+# a second automatic type_transition.
+domain_trans(init, logcat_exec, tb375fc_bootlog);
 
 allow tb375fc_bootlog metadata_file:dir {
     getattr
