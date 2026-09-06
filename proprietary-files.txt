@@ -12,10 +12,6 @@ product/etc/init/init.motodestktop.rc
 product/etc/permissions/product-permissions-mediatek.xml
 product/etc/security/fsverity/play_store_fsi_cert.der
 product/etc/sysconfig/d2d_cable_migration_feature.xml
-product/etc/sysconfig/initial-package-stopped-states-aosp.xml
-product/etc/sysconfig/preinstalled-packages-platform-handheld-product.xml
-product/etc/sysconfig/preinstalled-packages-platform-overlays.xml
-product/etc/sysconfig/preinstalled-packages-platform-telephony-product.xml
 product/etc/vintf/compatibility_matrix.xml;MAKE_COPY_RULE_ONLY
 product/media/audio/ui/ChargingStarted.ogg
 product/media/audio/ui/Dock.ogg
@@ -34,8 +30,6 @@ product/media/audio/ui/VideoStop.ogg
 product/media/audio/ui/camera_click.ogg
 product/media/audio/ui/camera_focus.ogg
 system_ext/apex/com.android.compos.apex
-system_ext/apex/com.android.vndk.v31.apex
-system_ext/apex/com.android.vndk.v33.apex
 system_ext/apex/com.android.vndk.v34.apex
 system/system/app/DolbyVisionService/DolbyVisionService.apk:system/app/DolbyVisionService/DolbyVisionService.apk
 system_ext/app/MiraVision/MiraVision.apk
@@ -105,15 +99,10 @@ system_ext/etc/init/rkp.rc
 system_ext/etc/motorola/bgintents/com.android.systemui.bgintents.xml
 system_ext/etc/mtklog-config.prop
 system_ext/etc/nr-city.xml
-system_ext/etc/permissions/appfunctions.extension.xml
-system_ext/etc/permissions/com.android.carrierconfig.xml
-system_ext/etc/permissions/com.android.emergency.xml
-system_ext/etc/permissions/com.android.extensions.appfunctions.xml
 system_ext/etc/permissions/com.dolby.daxservice.xml
 system_ext/etc/permissions/system-ext-permissions-mediatek.xml
 system_ext/etc/r_submix_audio_policy_configuration.xml
 system_ext/etc/spn-conf.xml
-system_ext/etc/sysconfig/android.telephony.satellite.xml
 system_ext/etc/sysconfig/com.android.phone.config.xml
 system_ext/etc/sysconfig/com.mediatek.ims.config.xml
 system_ext/etc/usb_audio_policy_configuration.xml
@@ -161,7 +150,6 @@ system_ext/lib64/android.hardware.radio.config@1.3.so;MAKE_COPY_RULE_ONLY
 system_ext/lib64/android.hardware.radio@1.5.so;MAKE_COPY_RULE_ONLY
 system_ext/lib64/android.hardware.radio@1.6.so;MAKE_COPY_RULE_ONLY
 system_ext/lib64/extractors/libmtkflacextractor.so
-system_ext/lib64/hw/android.hidl.memory@1.0-impl.so
 system_ext/lib64/libJpegOal.so
 system_ext/lib64/libMiraVision_jni.so
 system_ext/lib64/libPQDCjni.so
@@ -489,7 +477,6 @@ vendor/bin/hw/android.hardware.biometrics.fingerprint-service
 vendor/bin/hw/android.hardware.bluetooth-service-mediatek
 vendor/bin/hw/android.hardware.bluetooth@1.1-service-mediatek
 vendor/bin/hw/android.hardware.boot-service.mtk
-vendor/bin/hw/android.hardware.drm-service.clearkey;MAKE_COPY_RULE_ONLY
 vendor/bin/hw/android.hardware.gatekeeper-service.beanpod
 vendor/bin/hw/android.hardware.gnss-service.mediatek
 vendor/bin/hw/android.hardware.graphics.composer@3.2-service
@@ -576,7 +563,6 @@ vendor/bin/toybox_vendor
 vendor/bin/uart_launcher
 vendor/bin/vendor_mke2fs
 vendor/bin/vndservice
-vendor/bin/vndservicemanager
 vendor/bin/volte_clientapi_ua
 vendor/bin/volte_rcs_ua
 vendor/bin/vpud
@@ -779,7 +765,6 @@ vendor/etc/init/android.hardware.audio.service.mediatek.rc
 vendor/etc/init/android.hardware.bluetooth-service-mediatek.rc
 vendor/etc/init/android.hardware.bluetooth@1.1-service-mediatek.rc
 vendor/etc/init/android.hardware.boot-service.mtk.rc
-vendor/etc/init/android.hardware.drm-service.clearkey.rc
 vendor/etc/init/android.hardware.gatekeeper-service.beanpod.rc
 vendor/etc/init/android.hardware.gnss-service.mediatek.rc
 vendor/etc/init/android.hardware.graphics.allocator-V2-service-mediatek.rc
@@ -893,7 +878,6 @@ vendor/etc/init/vendor.microtrust.hardware.ifaa-service.rc
 vendor/etc/init/vendor.microtrust.hardware.soter-service.rc
 vendor/etc/init/vendor.microtrust.hardware.thh@2.0-service.rc
 vendor/etc/init/vibrator-mtk-default.rc
-vendor/etc/init/vndservicemanager.rc
 vendor/etc/init/volte_clientapi_ua.rc
 vendor/etc/init/wlan_assistant.rc
 vendor/etc/mali_platform.config
@@ -1049,7 +1033,6 @@ vendor/etc/vintf/manifest.xml;MAKE_COPY_RULE_ONLY
 vendor/etc/vintf/manifest/CommandService.xml;MAKE_COPY_RULE_ONLY
 vendor/etc/vintf/manifest/android.hardware.bluetooth-service-mediatek.xml;MAKE_COPY_RULE_ONLY
 vendor/etc/vintf/manifest/android.hardware.boot-service.mtk.xml;MAKE_COPY_RULE_ONLY
-vendor/etc/vintf/manifest/android.hardware.drm-service.clearkey.xml;MAKE_COPY_RULE_ONLY
 vendor/etc/vintf/manifest/android.hardware.gatekeeper-service.beanpod.xml;MAKE_COPY_RULE_ONLY
 vendor/etc/vintf/manifest/android.hardware.health-service.example.xml;MAKE_COPY_RULE_ONLY
 vendor/etc/vintf/manifest/android.hardware.neuralnetworks-shim-service-mtk.xml;MAKE_COPY_RULE_ONLY
@@ -1505,8 +1488,6 @@ vendor/lib/libvpu5.so
 vendor/lib/libvpud_vcodec.so
 vendor/lib/libwapi.so
 vendor/lib/libwpa_client.so
-vendor/lib/mediacas/libclearkeycasplugin.so
-vendor/lib/mediadrm/libdrmclearkeyplugin.so
 vendor/lib/mediadrm/libmockdrmcryptoplugin.so
 vendor/lib/mt6897/arm.graphics-V4-ndk.so
 vendor/lib/mt6897/arm.mali.platform-V2-ndk.so
@@ -2204,8 +2185,6 @@ vendor/lib64/libwifinvramdata.so
 vendor/lib64/libwifitest.so
 vendor/lib64/libwpa_client.so
 vendor/lib64/libwpfa.so
-vendor/lib64/mediacas/libclearkeycasplugin.so
-vendor/lib64/mediadrm/libdrmclearkeyplugin.so
 vendor/lib64/mediadrm/libmockdrmcryptoplugin.so
 vendor/lib64/motorola.hardware.input@1.0.so
 vendor/lib64/motorola.hardware.input@1.1.so

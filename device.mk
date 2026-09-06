@@ -79,6 +79,10 @@ PRODUCT_PROPERTY_OVERRIDES += persist.wm.freeform_window_management=1
 # together at /vendor/apex/com.android.hardware.cas.apex.
 PRODUCT_PACKAGES += com.android.hardware.cas
 
+# AOSP clearkey DRM HAL (replaces stock ZUI A34 binary that needed
+# libprotobuf-cpp-lite-21.7.so, absent in A17).
+PRODUCT_PACKAGES += android.hardware.drm-service.clearkey
+
 # System Tracing (Perfetto UI front-end, Developer Options -> System Tracing).
 # AOSP dev/QoL tool; stock ships it at /system/app/Traceur but LOS doesn't pull
 # it in by default for this product. Quick-settings tile + bug-report capture.
