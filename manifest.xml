@@ -17,6 +17,7 @@
 -->
 <manifest version="2.0" type="device" target-level="8">
     <sepolicy>
-        <version>202504</version>
+        <!-- PixelOS 17 / PLATFORM_SEPOLICY_VERSION; was 202504 on LOS A16 freeze. -->
+        <version>202604</version>
     </sepolicy>
 </manifest>
