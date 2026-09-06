@@ -13,6 +13,7 @@ DEVICE_PATH := device/lenovo/TB375FC
 # resolve mediatek-common.
 PRODUCT_SOONG_NAMESPACES += \
     hardware/google/pixel \
+    hardware/google/pixel/power-libperfmgr \
     hardware/lineage/interfaces/power-libperfmgr \
     hardware/mediatek
 
