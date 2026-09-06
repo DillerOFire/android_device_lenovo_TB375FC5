@@ -50,7 +50,6 @@ system_ext/bin/batterywarning
 system_ext/bin/boot_logo_updater
 system_ext/bin/fsck.ntfs;MAKE_COPY_RULE_ONLY
 system_ext/bin/hw/android.hardware.audio.parameter_parser.service;MAKE_COPY_RULE_ONLY
-system_ext/bin/hw/android.hidl.allocator@1.0-service
 system_ext/bin/kpoc_charger
 system_ext/bin/loghidlsysservice
 system_ext/bin/magt
@@ -87,7 +86,6 @@ system_ext/etc/hearing_aid_audio_policy_configuration.xml
 system_ext/etc/init/aee_aed64.rc
 system_ext/etc/init/aee_aed64_v2.rc
 system_ext/etc/init/android.hardware.audio.parameter_parser.service.rc
-system_ext/etc/init/android.hidl.allocator@1.0-service.rc
 system_ext/etc/init/batterywarning.rc
 system_ext/etc/init/bootlogoupdater.rc
 system_ext/etc/init/hw/init.aee.rc
@@ -120,7 +118,6 @@ system_ext/etc/sysconfig/com.android.phone.config.xml
 system_ext/etc/sysconfig/com.mediatek.ims.config.xml
 system_ext/etc/usb_audio_policy_configuration.xml
 system_ext/etc/vintf/manifest.xml;MAKE_COPY_RULE_ONLY
-system_ext/etc/vintf/manifest/android.hidl.allocator@1.0-service.xml;MAKE_COPY_RULE_ONLY
 system_ext/etc/vintf/manifest/mtk-mbrainj-default.xml;MAKE_COPY_RULE_ONLY
 system_ext/framework/CustomPropInterface.jar;MAKE_COPY_RULE_ONLY
 system_ext/framework/CustomPropInterface.jar.fsv_meta;MAKE_COPY_RULE_ONLY
