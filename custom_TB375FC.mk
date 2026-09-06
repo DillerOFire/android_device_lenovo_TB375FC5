@@ -1,63 +1,56 @@
 #
-# SPDX-FileCopyrightText: 2026 The PixelOS Project
+# SPDX-FileCopyrightText: 2026 The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# AOSP base. core_64_bit + full_base MUST come before vendor/device
-# makefiles, otherwise you end up with a 256 MB system image of 16 binaries.
+# Inherit from those products. Most specific first.
 #
 # Stock last-wins ro.zygote=zygote64. Keep TARGET_2ND_ARCH for 32-bit vendor
 # HALs, but do not start zygote32: ZUI ships no /vendor/lib/egl/libMEOW_data.so,
-# and 32-bit libGLES_meow SIGSEGVs on DDKHook fail (bootloop). 64-bit MEOW
-# loads mali + libMEOW_data.so and is the actual GPU wrapper.
+# and 32-bit libGLES_meow SIGSEGVs on DDKHook fail (bootloop).
 ZYGOTE_FORCE_64 := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-# WiFi-only tablet: full_base.mk (generic_no_telephony) instead of
-# full_base_telephony.mk. The telephony variant unconditionally adds Dialer +
-# TeleService + TelephonyProvider + Telecom + MmsService + CarrierDefaultApp +
-# SimAppDialog + apns-conf.xml. common_full_tablet_wifionly.mk only adds
-# EmergencyInfo; it does not remove already-pulled-in telephony packages.
+# WiFi-only tablet: full_base (not full_base_telephony). Telephony would pull
+# Dialer/TeleService/etc.; common_full_tablet_wifionly does not strip them.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 
-# Virtual A/B + vendor_ramdisk + compression. Pulls in snapuserd /
-# snapuserd.vendor_ramdisk / snapuserd.recovery, plus linker.vendor_ramdisk +
-# e2fsck.vendor_ramdisk + fsck.f2fs.vendor_ramdisk under TARGET_VENDOR_RAMDISK_OUT,
-# and ro.virtual_ab.* sysprops. Otherwise vendor_ramdisk00 is 1.4 KB of just
-# fstab files and first-stage init has no snapuserd to bind dm-snapshot.
+# Virtual A/B + vendor_ramdisk + compression. Required for this GKI MTK tablet:
+# without snapuserd on vendor_ramdisk, first-stage init cannot bind dm-snapshot.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
 
-# Sounds
-$(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
-
-# Device-specific
-$(call inherit-product, device/lenovo/TB375FC/device.mk)
-
-# Vendor blobs
-$(call inherit-product-if-exists, vendor/lenovo/TB375FC/TB375FC-vendor.mk)
-$(call inherit-product-if-exists, vendor/lenovo/TB375FC/TB375FC-overlays.mk)
-
-# Must be set before vendor/custom common (bootanimation + face unlock gates).
-# 12.7" 2944x1840 panel — shorter edge for bootanimation_res.
-TARGET_SCREEN_WIDTH := 1840
-# No face unlock hardware on this tablet.
+# No face unlock hardware on this tablet (must be set before vendor/custom).
 TARGET_FACE_UNLOCK_SUPPORTED := false
 
-# PixelOS tablet wifi-only (Lineage tablet base + vendor/custom GMS/overlays).
+# Inherit from TB375FC device (vendor blobs + TARGET_SCREEN_WIDTH live there).
+$(call inherit-product, device/lenovo/TB375FC/device.mk)
+
+# Inherit some common PixelOS stuff (tablet wifi-only).
+# Matches PixelOS-Devices caihong (OPD2403) product shape.
 $(call inherit-product, vendor/custom/config/common_full_tablet_wifionly.mk)
 
-PRODUCT_DEVICE := TB375FC
 PRODUCT_NAME := custom_TB375FC
+PRODUCT_DEVICE := TB375FC
+PRODUCT_MANUFACTURER := Lenovo
 PRODUCT_BRAND := Lenovo
 PRODUCT_MODEL := TB375FC
-PRODUCT_MANUFACTURER := Lenovo
+# Stock ZUI / LOS: tablet only. This device has a microSD slot — do not set nosdcard.
 PRODUCT_CHARACTERISTICS := tablet
 
-# PRC SKU identity. The lgsi block MUST agree with PRODUCT_DEVICE.
+PRODUCT_GMS_CLIENTID_BASE := android-lenovo-rev2
+
+# PRC SKU identity. Must agree with PRODUCT_DEVICE (see device.mk note).
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.hw.version=TB375FC \
     ro.vendor.config.lgsi.ota.model=TB375FC_PRC
 
-PRODUCT_GMS_CLIENTID_BASE := android-lenovo-rev2
+# Stock ZUI 17.5.10.103 (full-ZUI-17.5.10.103 dump) identity.
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    BuildDesc="TB375FC-user 16 BP2A.250605.031.A3 TB375FC_CN_OPEN_USER_M21.814_A16_ZUI_17.5.10.103_ST_260525 release-keys" \
+    BuildFingerprint=Lenovo/TB375FC/TB375FC:16/BP2A.250605.031.A3/ZUXOS_1.5.10.103_260525_PRC:user/release-keys \
+    DeviceName=TB375FC \
+    DeviceProduct=TB375FC \
+    SystemDevice=TB375FC \
+    SystemName=TB375FC
 
 # Self-hosted OTA (brr / ota.splazma.site). Same pattern as custom_audi:
 # vendor/custom only ships Updater for IS_OFFICIAL builds.

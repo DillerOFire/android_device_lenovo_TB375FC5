@@ -386,3 +386,9 @@ WPA_SUPPLICANT_VERSION      := VER_0_8_X
 
 # Inherit shared MTK + Lenovo common config when those land.
 # include device/lenovo/common/BoardConfigCommon.mk
+
+# PixelOS/LOS partition reserved-size helpers (no-op when WITH_GMS=true).
+-include vendor/lineage/config/BoardConfigReservedSize.mk
+
+# Vendor board fragments (may be empty; keep the include for extract-utils).
+include vendor/lenovo/TB375FC/BoardConfigVendor.mk

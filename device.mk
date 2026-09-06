@@ -473,5 +473,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_VENDOR_PROPERTIES += \
     vendor.bluetooth.ldac.abr=true
 
-# LineageOS feature toggles
+# Boot animation / PixelOS bootanimation_res (shorter edge of 2944x1840).
+# TARGET_SCREEN_WIDTH must be visible before vendor/custom common inherits.
+TARGET_SCREEN_WIDTH := 1840
 TARGET_BOOT_ANIMATION_RES := 1840
+
+# Vendor blobs (same placement as audi device.mk + PixelOS caihong chain).
+$(call inherit-product-if-exists, vendor/lenovo/TB375FC/TB375FC-vendor.mk)
+$(call inherit-product-if-exists, vendor/lenovo/TB375FC/TB375FC-overlays.mk)
