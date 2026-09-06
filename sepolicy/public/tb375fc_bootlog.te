@@ -1,0 +1,8 @@
+# Early-boot logcat domain (system_ext / platform SEPolicy).
+# Must NOT live in vendor SEPolicy: BOARD_API_LEVEL >= 202604 Treble labeling
+# forbids coredomain in vendor (PixelOS 17 / PLATFORM_SEPOLICY_VERSION 202604).
+#
+# loggy.rc runs /system/bin/logcat with seclabel u:r:tb375fc_bootlog:s0 and
+# writes /metadata/boot_log_*.txt for recovery inspection after a soft-brick.
+type tb375fc_bootlog, domain, coredomain;
+type tb375fc_boot_log_file, file_type;

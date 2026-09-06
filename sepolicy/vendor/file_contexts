@@ -1,7 +1,3 @@
-# Early boot diagnostic logs: a dedicated type avoids violating the
-# platform neverallow that protects metadata_file from logpersist writes.
-/metadata/boot_log_(full|crash|kernel|avc)\.txt u:object_r:tb375fc_boot_log_file:s0
-
 # Without correct labels, init exec leaves them in init:s0 context, breaking
 # their internal logic (and critically, breaking teei_daemon, which breaks
 # keymaster, which breaks FBE decrypt, which makes libpowerhal loop on

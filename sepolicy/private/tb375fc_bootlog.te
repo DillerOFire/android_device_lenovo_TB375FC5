@@ -1,0 +1,30 @@
+# Early-boot logger: platform neverallows stop logpersist from writing arbitrary
+# file types, so this coredomain owns /metadata/boot_log_*.txt instead.
+#
+# Do NOT domain_auto_trans(init, logcat_exec, ...): platform init.te already has
+# domain_auto_trans(init, logcat_exec, logpersist). loggy.rc sets
+# seclabel u:r:tb375fc_bootlog:s0 — domain_trans allows that setexeccon path.
+domain_trans(init, logcat_exec, tb375fc_bootlog);
+
+allow tb375fc_bootlog metadata_file:dir {
+    getattr
+    open
+    read
+    search
+    write
+    add_name
+    remove_name
+};
+type_transition tb375fc_bootlog metadata_file:file tb375fc_boot_log_file;
+allow tb375fc_bootlog tb375fc_boot_log_file:file {
+    create
+    getattr
+    open
+    write
+    append
+    setattr
+};
+
+control_logd(tb375fc_bootlog)
+unix_socket_connect(tb375fc_bootlog, logdr, logd)
+get_prop(tb375fc_bootlog, logd_prop)
