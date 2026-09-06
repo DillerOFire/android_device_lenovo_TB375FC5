@@ -186,7 +186,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # (2026-09-04): 6/6 accepted. ON won every block (352/335/355 vs OFF
 # 407/392/576). Unpaired 95% CIs overlap because OFF variance is huge;
 # operator pin.
-# AOSPperfQA schema-2 SF matrix, 2026-09-04: retained measured control.
+# AOSPperfQA schema-2 input-latency matrix, 2026-09-05: retained measured control.
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.adb.secure.recovery=0 \
     ro.surface_flinger.enable_frame_rate_override=false \
