@@ -527,7 +527,6 @@ vendor/bin/hw/vendor.mediatek.hardware.tinno_keyboard@1.0-service
 vendor/bin/hw/vendor.microtrust.hardware.ifaa-service
 vendor/bin/hw/vendor.microtrust.hardware.soter-service
 vendor/bin/hw/vendor.microtrust.hardware.thh@2.0-service
-vendor/bin/hw/wpa_supplicant;MAKE_COPY_RULE_ONLY
 vendor/bin/init.insmod.sh
 vendor/bin/init.pstore_blk.sh
 vendor/bin/init_thh
@@ -777,7 +776,6 @@ vendor/etc/init/android.hardware.sensors-service-multihal.rc
 vendor/etc/init/android.hardware.usb-aidl-service.mediatek.rc
 vendor/etc/init/android.hardware.usb.gadget-aidl-service.mediatek.rc
 vendor/etc/init/android.hardware.wifi-service-lazy.rc
-vendor/etc/init/android.hardware.wifi.supplicant-service.rc
 vendor/etc/init/arm.mali.platform-mediatek.rc
 vendor/etc/init/atcid.rc
 vendor/etc/init/audiocmdservice_atci.rc

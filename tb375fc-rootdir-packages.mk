@@ -8,9 +8,10 @@ PRODUCT_PACKAGES += \
     fstab.mt6897 \
     fstab.mt8792
 
-# 89 init.rc scripts -> vendor/etc/init/.
+# 88 init.rc scripts -> vendor/etc/init/.
 # Removed: gsm0710muxd, init.bip_ap, init.cccimdinit, init.cccirpcd, mtkrild,
-# muxreport, volte_clientapi_ua (cellular stack not used; device is WiFi-only).
+# muxreport, volte_clientapi_ua (cellular stack not used; device is WiFi-only),
+# android.hardware.wifi.supplicant-service (AOSP module ships the unified rc).
 # mtk_storageproxyd (Trusty TEE proxy; this device uses Microtrust/Beanpod
 # KeyMint instead).
 PRODUCT_COPY_FILES += \
@@ -31,7 +32,6 @@ PRODUCT_COPY_FILES += \
     device/lenovo/TB375FC/rootdir/etc/init/android.hardware.usb-aidl-service.mediatek.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.usb-aidl-service.mediatek.rc \
     device/lenovo/TB375FC/rootdir/etc/init/android.hardware.usb.gadget-aidl-service.mediatek.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.usb.gadget-aidl-service.mediatek.rc \
     device/lenovo/TB375FC/rootdir/etc/init/android.hardware.wifi-service-lazy.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi-service-lazy.rc \
-    device/lenovo/TB375FC/rootdir/etc/init/android.hardware.wifi.supplicant-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi.supplicant-service.rc \
     device/lenovo/TB375FC/rootdir/etc/init/arm.mali.platform-mediatek.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/arm.mali.platform-mediatek.rc \
     device/lenovo/TB375FC/rootdir/etc/init/atcid.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/atcid.rc \
     device/lenovo/TB375FC/rootdir/etc/init/audiocmdservice_atci.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/audiocmdservice_atci.rc \

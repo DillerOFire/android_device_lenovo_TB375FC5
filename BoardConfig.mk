@@ -376,6 +376,12 @@ BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES := true
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_HOSTAPD_DRIVER        := NL80211
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
+
+# Ship AOSP supplicant init rc from the soong wpa_supplicant module itself.
+# The stock rc (no user/group/capabilities) must NOT override it: stock binary
+# runs as root, tries setuid/setgid, AOSP sepolicy denies, config write fails,
+# supplicant addStaInterface throws -> no scan results.
+WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 # BOARD_WLAN_DEVICE intentionally NOT set. Setting it to MediaTek makes
 # libwifi_hal_vendor_impl_defaults demand libwifi-hal-mediatek which only
 # exists inside proprietary MTK source we don't have. The wifi vendor HAL
