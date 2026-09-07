@@ -92,11 +92,9 @@ class TB375FCDevice : public ::Device {
         ::RecoveryUI* ui = GetUI();
         ui->Print("Mounting /metadata ...\n");
 
-        // The partition is F2FS (see rootdir/etc/fstab.recovery). A raw mount()
-        // bypasses the toybox fstab user-mountable check that rejected a shell
-        // mount earlier; recovery runs as root in the (debug) permissive domain.
-        const int flags = MS_NOATIME | MS_NOSUID | MS_NODEV;
-        if (mount(kMetadataSource, kMetadataTarget, "f2fs", flags, "discard") != 0) {
+        // Diagnostics only: avoid mutating metadata while exposing boot logs.
+        const int flags = MS_RDONLY | MS_NOATIME | MS_NOSUID | MS_NODEV;
+        if (mount(kMetadataSource, kMetadataTarget, "f2fs", flags, nullptr) != 0) {
             ui->Print("Failed to mount /metadata: %s\n", strerror(errno));
             return;
         }
