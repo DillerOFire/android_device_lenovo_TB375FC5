@@ -5,6 +5,10 @@ on post-fs
     # logcat runs in its own SELinux domain; init prepares DAC access first.
     chmod 0755 /metadata
     rm /metadata/boot_log_full.txt
+    rm /metadata/boot_log_full.txt.1
+    rm /metadata/boot_log_full.txt.2
+    rm /metadata/boot_log_full.txt.3
+    rm /metadata/boot_log_full.txt.4
     rm /metadata/boot_log_crash.txt
     rm /metadata/boot_log_kernel.txt
     rm /metadata/boot_log_avc.txt
@@ -13,7 +17,9 @@ on post-fs
     start boot_log_kernel
     start boot_log_avc
 
-service boot_log_full /system/bin/logcat -b all -D -f /metadata/boot_log_full.txt
+# Keep a rotating all-buffer history past boot completion for post-setup
+# diagnostics (especially Wi-Fi), bounded to 5 × 4 MiB on /metadata.
+service boot_log_full /system/bin/logcat -b all -D -r 4096 -n 4 -f /metadata/boot_log_full.txt
     class main
     user root
     group root system
@@ -46,7 +52,8 @@ service boot_log_avc /system/bin/logcat -e avc -f /metadata/boot_log_avc.txt
     oneshot
 
 on property:sys.boot_completed=1
-    stop boot_log_full
+    # Keep boot_log_full alive as bounded rotating post-boot evidence. The
+    # other three streams are boot-failure captures and stop as before.
     stop boot_log_crash
     stop boot_log_kernel
     stop boot_log_avc

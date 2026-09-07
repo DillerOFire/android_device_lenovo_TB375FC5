@@ -38,6 +38,19 @@ PRODUCT_CHARACTERISTICS := tablet
 
 PRODUCT_GMS_CLIENTID_BASE := android-lenovo-rev2
 
+# Temporary bring-up bridge: Setup Wizard cannot present the RSA approval UI.
+# Expose unauthenticated shell ADB so Wi-Fi can be diagnosed before setup.
+# Disable Trade-in Mode too: its foyer domain allows only `adb shell
+# tradeinmode`, not normal `adb logcat`. Do not set ro.debuggable or ro.secure: those make user adbd attempt an absent
+# su context. Remove this entire block once Wi-Fi and Setup Wizard are healthy.
+ifeq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.adb.secure=0 \
+    security.adb.require_authenticated=0 \
+    persist.adb.tradeinmode=-1 \
+    persist.sys.usb.config=adb
+endif
+
 # PRC SKU identity. Must agree with PRODUCT_DEVICE (see device.mk note).
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.hw.version=TB375FC \

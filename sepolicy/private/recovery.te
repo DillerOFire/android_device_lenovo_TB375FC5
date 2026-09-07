@@ -5,9 +5,6 @@
 # is non-fatal, but it is a real enforcing denial. Mirrors the existing AOSP
 # r_dir_file(recovery, sysfs_fs_ext4_features).
 recovery_only(`
-    # Debug recovery: allow metadata mounting/log access on user builds.
-    permissive recovery;
-
     # Permit non-root recovery ADB to inspect metadata boot logs.
     # Files are tb375fc_boot_log_file, not metadata_file — allow both.
     allow shell metadata_file:dir r_dir_perms;
