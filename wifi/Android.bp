@@ -1,0 +1,9 @@
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+cc_library_static {
+    name: "libtb375fc_wpa_v34_crypto_compat",
+    vendor: true,
+    srcs: ["v34_crypto_compat.c"],
+}

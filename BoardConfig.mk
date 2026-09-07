@@ -376,6 +376,9 @@ BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES := true
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_HOSTAPD_DRIVER        := NL80211
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
+# AOSP wpa_supplicant runs in the vendor namespace, whose v34 libcrypto keeps
+# Lenovo blobs working. Bridge its renamed stack API through a device-only lib.
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := libtb375fc_wpa_v34_crypto_compat
 
 # Ship AOSP supplicant init rc from the soong wpa_supplicant module itself.
 # The stock rc (no user/group/capabilities) must NOT override it: stock binary
