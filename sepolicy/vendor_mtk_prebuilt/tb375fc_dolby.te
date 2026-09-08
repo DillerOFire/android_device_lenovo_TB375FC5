@@ -28,10 +28,12 @@ typeattribute audioserver hal_dms_client;
 typeattribute hal_audio_default hal_dms_client;
 typeattribute mediacodec hal_dms_client;
 typeattribute platform_app hal_dms_client;
+typeattribute platform_app_36 hal_dms_client;
 typeattribute system_server hal_dms_client;
 
 # hal_dvs_client (vendorcodec already joined in mtk_proprietary.te):
 typeattribute platform_app hal_dvs_client;
+typeattribute platform_app_36 hal_dvs_client;
 typeattribute system_app hal_dvs_client;
 
 # Dolby DAX AIDL service (vendor.dolby.dms.IDms). A16 exposes Dolby audio over an
@@ -44,4 +46,5 @@ type dms_aidl_service;
 typeattribute dms_aidl_service service_manager_type;
 typeattribute dms_aidl_service hal_service_type;
 allow platform_app dms_aidl_service:service_manager find;
+allow platform_app_36 dms_aidl_service:service_manager find;
 allow hal_dms_default dms_aidl_service:service_manager { add find };
