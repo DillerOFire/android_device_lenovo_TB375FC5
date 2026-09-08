@@ -70,7 +70,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 PRODUCT_PACKAGES += Updater
 
 PRODUCT_SYSTEM_PROPERTIES += \
-    lineage.updater.uri=https://ota.splazma.site/u/{device}?t={type}&i={incr} \
     ro.lineage.device=TB375FC \
     ro.lineage.releasetype=UNOFFICIAL \
     ro.lineage.build.version=17.0
