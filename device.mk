@@ -132,7 +132,6 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/rootdir/etc/init.recovery.mt8792.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.mt8792.rc
 
 PRODUCT_SHIPPING_API_LEVEL := 34
-PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
 
 # Dynamic partitions: required for super.img construction and to make Soong

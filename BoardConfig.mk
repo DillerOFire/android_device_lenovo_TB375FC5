@@ -342,9 +342,6 @@ BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor_mtk_prebuilt
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS  += $(DEVICE_PATH)/sepolicy/public
 
-
-BOARD_KERNEL_VERSION := 6.1
-
 # Prebuilt kernel modules. 282 .ko files from the device's own stock A16
 # TB375FC PRC build sit under prebuilts/modules/{vendor_ramdisk,vendor_dlkm,
 # system_dlkm}/. Load order mirrored from the live stock device's modules.load.
