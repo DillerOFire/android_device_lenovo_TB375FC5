@@ -289,8 +289,6 @@ BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.recovery
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_DENSITY := xhdpi
-# Device recovery UI extension: adds a metadata mount toggle to the Advanced menu.
-TARGET_RECOVERY_UI_LIB := librecovery_ui_tb375fc
 # 12.7" tablet at 2944x1840; chunky touch targets compensate for recovery's
 # minimal UI scaling.
 TARGET_RECOVERY_UI_MARGIN_HEIGHT := 100

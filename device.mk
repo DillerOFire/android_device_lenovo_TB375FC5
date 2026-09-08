@@ -181,9 +181,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # SurfaceFlinger is a system process, and these are native AOSP readers. The
 # OEM-only vendor.debug.sf.cpupolicy/dynamic_duration namespace is deliberately
 # not carried over; AOSP has no reader for it.
-# Recovery defaults to unauthenticated ADB only; adbd consults this property
-# exclusively in recovery. Normal Android remains governed by ro.adb.secure=1.
-# Skip the optional second-package recovery reboot prompt after an A/B sideload.
 # Runtime WorkDuration (userdebug/root): tools/tune_sf_workduration.sh
 # <late_sf_ns> <early_sf_ns> <late_app_ns>. SF reloads those three native
 # values without a reboot. early SF/GL uses early.sf; early/GL app uses late.app.
@@ -193,8 +190,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # operator pin.
 # AOSPperfQA schema-2 input-latency matrix, 2026-09-05: retained measured control.
 PRODUCT_SYSTEM_PROPERTIES += \
-    ro.adb.secure.recovery=0 \
-    ro.recovery.skip_ab_reboot_prompt=true \
     ro.surface_flinger.enable_frame_rate_override=false \
     ro.surface_flinger.force_hwc_copy_for_virtual_displays=true \
     ro.surface_flinger.has_wide_color_display=true \
