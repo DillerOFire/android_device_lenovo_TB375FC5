@@ -45,7 +45,7 @@ Kernel, DTB and modules ship prebuilt in the device tree (`prebuilts/`), so no k
 </manifest>
 ```
 
-`hardware/mediatek` is the upstream LineageOS common tree (the device inherits it). For the ROW (global) sibling, use `android_device_lenovo_TB373FU` and `lunch lineage_TB373FU-bp4a-user` instead - see that tree's README.
+`hardware/mediatek` is the upstream LineageOS common tree (the device inherits it). For the ROW (global) sibling, use `DillerOFire/android_device_lenovo_TB373FU` and `lunch custom_TB373FU-cp2a-user` instead - see that tree's README.
 
 ## Notes
 

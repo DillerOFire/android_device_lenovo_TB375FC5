@@ -270,7 +270,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 
 # Lenovo platform identity common to both SKUs. The SKU-specific fields -
 # hw.version, ota.model, region, en.market_name - are set per-product in
-# lineage_TB375FC.mk / lineage_TB373FU.mk, because this lgsi block MUST agree
+# custom_TB375FC.mk / custom_TB373FU.mk (and the lineage_*.mk mirrors), because
+# this lgsi block MUST agree
 # with ro.product.device: the PRC lgsi values over a TB373FU device name make
 # the region-aware vendor PQ stall before the panel comes up (boot hang).
 PRODUCT_VENDOR_PROPERTIES += \
