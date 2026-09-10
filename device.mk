@@ -4,7 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/lenovo/TB375FC
+DEVICE_PATH := device/lenovo/peridotl
+
+# Resolve the retail SKU while init is loading properties. This runs after the
+# partition build props are present and before product aliases and fingerprints
+# are derived or vendor services start.
+$(call soong_config_set,libinit,vendor_init_lib,//$(DEVICE_PATH)/init:libinit_peridotl)
 
 # MT6897 common trees from mt6897-devs/lineage-23.2:
 # mssi.mk (RRO for telephony/wifi config), mediatek-frameworks.mk (adds
@@ -48,7 +53,7 @@ $(call inherit-product, hardware/lineage/compat/frameworks/compat.mk)
 # com.mediatek.common.* classes live in the 88 KB proprietary jar at
 # /system_ext/framework/mediatek-common.jar, which isn't on BOOTCLASSPATH.
 #
-# Fix: a dex_import at device/lenovo/TB375FC/prebuilts/framework/Android.bp
+# Fix: a dex_import at device/lenovo/peridotl/prebuilts/framework/Android.bp
 # is declared with the SAME name (`mediatek-common`) as the LOS source and
 # `prefer: true`. Soong's source-vs-prebuilt resolution picks the prebuilt;
 # the LOS source becomes inactive (not built, not installed, not in boot
@@ -268,12 +273,8 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.pen.event.name=touch-pen \
     ro.vendor.config.lgsi.pen.compat.project=1
 
-# Lenovo platform identity common to both SKUs. The SKU-specific fields -
-# hw.version, ota.model, region, en.market_name - are set per-product in
-# custom_TB375FC.mk / custom_TB373FU.mk (and the lineage_*.mk mirrors), because
-# this lgsi block MUST agree
-# with ro.product.device: the PRC lgsi values over a TB373FU device name make
-# the region-aware vendor PQ stall before the panel comes up (boot hang).
+# Lenovo platform identity common to both SKUs. Libinit assigns hw.version,
+# ota.model, market name, and ro.product identity as one runtime unit.
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.config.lgsi.project=peridot \
     ro.vendor.config.lgsi.device.type=pad \
@@ -367,7 +368,7 @@ PRODUCT_PACKAGES += \
 # The old Settings.Secure observer app bridge is retired.
 # RRO turning on config_supportDoubleTapWake so AOSP Settings -> Display
 # surfaces the toggle.
-DEVICE_PACKAGE_OVERLAYS += device/lenovo/TB375FC/overlay
+DEVICE_PACKAGE_OVERLAYS += device/lenovo/peridotl/overlay
 
 # Lineage power HAL (libperfmgr) replaces the stock MTK AIDL power HAL.
 # - mode_extension_lib wires our DT2W handler into PowerExt (see above).
@@ -385,7 +386,7 @@ PRODUCT_COPY_FILES += \
 
 # Locale-to-timezone first-boot mapping (Setup Wizard picks region -> we set TZ).
 PRODUCT_COPY_FILES += \
-    device/lenovo/TB375FC/rootdir/etc/init/locale-to-timezone.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/locale-to-timezone.rc
+    device/lenovo/peridotl/rootdir/etc/init/locale-to-timezone.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/locale-to-timezone.rc
 
 # AIDL backward-compat NDK libs for vendor-frozen-at-API-34 binaries. Stock HALs
 # link against older AIDL versions that AOSP A16 only builds the current version

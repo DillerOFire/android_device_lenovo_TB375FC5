@@ -1,6 +1,10 @@
-# Lenovo Xiaoxin Pad Pro 12.7 (2025) - TB375FC
+# Lenovo peridotl - TB375FC / TB373FU
 
-LineageOS 23.2 (Android 16) device tree for the Lenovo Xiaoxin Pad Pro 12.7 (2025), `TB375FC`, the PRC Wi-Fi variant. ODM is Wingtech; the internal project codename is `peridot`.
+PixelOS 17 device tree for Lenovo's `peridot` Wi-Fi tablet platform. The ROM
+target is named `peridotl` to avoid PixelOS's existing Xiaomi `peridot` target.
+One `custom_peridotl` product supports the PRC `TB375FC` and ROW `TB373FU`
+retail SKUs through init-time detection. Stock LGSI project properties remain
+`peridot`.
 
 ## Specifications
 
@@ -20,32 +24,45 @@ LineageOS 23.2 (Android 16) device tree for the Lenovo Xiaoxin Pad Pro 12.7 (202
 ## Build
 
 ```
-repo init -u https://github.com/LineageOS/android.git -b lineage-23.2
+repo init -u https://github.com/PixelOS-AOSP/android_manifest.git -b seventeen
 ```
 
-Add the manifest below as `.repo/local_manifests/TB375FC.xml`, then:
+Add the manifest below as `.repo/local_manifests/peridotl.xml`, then:
 
 ```
 repo sync
 source build/envsetup.sh
-lunch lineage_TB375FC-bp4a-user
-mka bacon
+lunch custom_peridotl-cp2a-user
+m bacon
 ```
 
 Kernel, DTB and modules ship prebuilt in the device tree (`prebuilts/`), so no kernel source is needed to build. The from-source 6.1 kernel that produced them is published separately as `android_device_lenovo_TB375FC-kernel` for reference and reproducibility; the build does not consume it.
 
-### local_manifests/TB375FC.xml
+### local_manifests/peridotl.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <project name="LosSantosPro/android_device_lenovo_TB375FC" path="device/lenovo/TB375FC" remote="github" revision="lineage-23.2" />
-  <project name="LosSantosPro/android_vendor_lenovo_TB375FC" path="vendor/lenovo/TB375FC" remote="github" revision="lineage-23.2" />
+  <project name="DillerOFire/android_device_lenovo_peridotl" path="device/lenovo/peridotl" remote="github" revision="lineage-23.2" />
+  <project name="DillerOFire/android_vendor_lenovo_TB375FC" path="vendor/lenovo/TB375FC" remote="github" revision="lineage-23.2" />
   <project name="LineageOS/android_hardware_mediatek" path="hardware/mediatek" remote="github" revision="lineage-23.2" />
 </manifest>
 ```
 
-`hardware/mediatek` is the upstream LineageOS common tree (the device inherits it). For the ROW (global) sibling, use `DillerOFire/android_device_lenovo_TB373FU` and `lunch custom_TB373FU-cp2a-user` instead - see that tree's README.
+`hardware/mediatek` is the upstream LineageOS common tree inherited by this
+target. The older separate TB373FU wrapper is not used by the unified build.
+
+## Runtime SKU detection
+
+Init treats `ro.boot.region` as authoritative and uses `ro.boot.boardid` only
+as a fallback. `PRC` / `P98300DA2` selects TB375FC; `ROW` / `P98300DA1`
+selects TB373FU. Conflicts are logged and the region wins. Missing or unknown
+identifiers use a clearly logged neutral `peridotl` identity.
+
+The TB375FC values have been captured from hardware. The TB373FU region value
+remains an expected stock mapping until it is captured from a live device. A
+physical TB373FU has booted the same signed PixelOS DTBO used by TB375FC
+(`sha256 fe5e7bc48f030bf343e6376bacea6a49ea463c256f880f4f190b7becfcd27be8`).
 
 ## Notes
 

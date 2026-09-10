@@ -15,7 +15,7 @@ allow hal_health_default sysfs:file { getattr open read };
 allow init hal_fingerprint_default:process { ptrace };
 allow init mnld_socket:sock_file { create setattr };
 allow init mtk_lbs_service:binder { call transfer };
-allow init wpa_wlan0_socket:sock_file { create setattr };
+allow init wpa_wlan0_socket:sock_file { create setattr unlink };
 allow init_insmod_sh init_insmod_sh:capability { sys_nice };
 allow init_insmod_sh init_insmod_sh:key { write };
 allow init_insmod_sh kernel:process { setsched };

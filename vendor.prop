@@ -1,7 +1,3 @@
-# Vendor properties whose values contain spaces. PRODUCT_VENDOR_PROPERTIES word-
-# splits a value at every space (it truncates "Lenovo Xiaoxin Pad Pro 12.7" down
-# to "Lenovo"), so these are set through this TARGET_VENDOR_PROP file, which is
-# appended to /vendor/build.prop verbatim. PRC (TB375FC) values; the ROW sibling
-# overrides TARGET_VENDOR_PROP with device/lenovo/TB373FU/vendor.prop.
+# Shared vendor properties whose values contain spaces. Runtime SKU market names
+# are assigned together with the rest of the product identity by libinit.
 ro.vendor.config.lgsi.pen_info=0x617F:0x17EF:Lenovo Tab Pen Plus
-ro.vendor.config.lgsi.en.market_name=Lenovo Xiaoxin Pad Pro 12.7

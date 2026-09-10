@@ -5,8 +5,8 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/custom_TB375FC.mk
+    $(LOCAL_DIR)/custom_peridotl.mk
 
 COMMON_LUNCH_CHOICES := \
-    custom_TB375FC-cp2a-userdebug \
-    custom_TB375FC-cp2a-user
+    custom_peridotl-cp2a-userdebug \
+    custom_peridotl-cp2a-user

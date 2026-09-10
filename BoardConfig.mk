@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/lenovo/TB375FC
+DEVICE_PATH := device/lenovo/peridotl
 
 # Partition layout: real /vendor, /product, /system_ext as own partitions
 # (not legacy /system/vendor nested). Required for BUILDING_VENDOR_IMAGE.
@@ -41,6 +41,10 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 TARGET_BOARD_PLATFORM           := mt6897
 TARGET_BOOTLOADER_BOARD_NAME    := mt6897
 TARGET_NO_BOOTLOADER            := true
+
+# One OTA serves the peridotl target and both retail SKU identities. Keep the
+# former peridot alias for compatibility with already-generated metadata.
+TARGET_OTA_ASSERT_DEVICE := TB375FC,TB373FU,peridotl,peridot
 
 # Kernel
 BOARD_KERNEL_BASE             := 0x40000000
@@ -132,9 +136,8 @@ TARGET_PREBUILT_KERNEL  := $(DEVICE_PATH)/prebuilts/Image.gz
 TARGET_NEEDS_DTBOIMAGE  := true
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo_TB375FC.img
 
-# Vendor props whose values contain spaces (marketname, pen name). They are set
-# via a verbatim prop file because PRODUCT_VENDOR_PROPERTIES word-splits a value
-# at every space. The TB373FU variant overrides this with its own ROW vendor.prop.
+# Shared vendor props whose values contain spaces. SKU-specific market identity
+# is assigned by libinit after reading the bootloader properties.
 TARGET_VENDOR_PROP := $(DEVICE_PATH)/vendor.prop
 
 # Vendor security patch level. The vendor partition is the stock TB375FC PRC A16

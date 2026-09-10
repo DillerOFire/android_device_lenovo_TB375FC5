@@ -5,13 +5,11 @@
 #
 LOCAL_PATH := $(call my-dir)
 
-# Applies to BOTH SKUs that share this device tree: TB375FC (PRC) and its ROW
-# sibling TB373FU. TARGET_DEVICE is the only build-visible difference between
-# them, so this guard MUST list both. A bare TB375FC-only check silently skips
-# this whole block for the TB373FU build, which drops the vendor/bin symlinks
+# Applies to the peridotl ROM target. Keep the OEM project and retail device
+# names in the guard so external product aliases do not drop vendor/bin symlinks
 # (including the toybox aliases the early-init module loader resolves cat/wc
 # through) and hangs boot at a black screen.
-ifneq ($(filter TB375FC TB373FU,$(TARGET_DEVICE)),)
+ifneq ($(filter peridotl peridot TB375FC TB373FU,$(TARGET_DEVICE)),)
 # 381 vendor/lib64 -> mt6897/* symlinks. Rules reference $(TARGET_OUT_VENDOR),
 # which is only set after envsetup.mk runs - device.mk is parsed during
 # product-config (too early).
